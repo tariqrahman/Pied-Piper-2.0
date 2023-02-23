@@ -1,13 +1,13 @@
 import { useState } from 'react'
 import { Dialog } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
+import { getProviders, signIn, signOut } from "next-auth/react";
 
 const navigation = [
-  { name: 'log in', href: '#' },
   { name: 'about us', href: '#' },
 ]
 
-export default function Example() {
+export default function Home({ providers }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   return (
@@ -63,9 +63,12 @@ export default function Example() {
             ))}
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
-              Log in <span aria-hidden="true">&rarr;</span>
-            </a>
+            {Object.values(providers).map((provider) => (
+                <div key={provider.name}> 
+                    <button className="text-sm font-semibold leading-6 text-gray-900"
+                    onClick={() => signIn(provider.id, {callbackUrl: "/"})}> log in  <span aria-hidden="true">&rarr;</span></button>
+                </div>
+            ))}
           </div>
         </nav>
         <Dialog as="div" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
@@ -163,4 +166,15 @@ export default function Example() {
       </main>
     </div>
   )
+}
+
+
+export async function getServerSideProps() {
+  const providers = await getProviders();
+
+  return {
+      props: {
+          providers,
+      },
+  }
 }
