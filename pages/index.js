@@ -5,6 +5,9 @@ import { getProviders, signIn, signOut } from "next-auth/react";
 
 const navigation = [
   { name: 'about us', href: '#' },
+  { name: 'users', href: '/users' },
+  { name: 'new home page', href: '/newhomepage'},
+  { name: 'dashboard', href: '/dashboard'}
 ]
 
 export default function Home({ providers }) {
@@ -55,6 +58,7 @@ export default function Home({ providers }) {
               <Bars3Icon className="h-6 w-6" aria-hidden="true" />
             </button>
           </div>
+          {/* navbar is here */}
           <div className="hidden lg:flex lg:gap-x-12">
             {navigation.map((item) => (
               <a key={item.name} href={item.href} className="text-sm font-semibold leading-6 text-gray-900">
@@ -87,6 +91,7 @@ export default function Home({ providers }) {
                 <XMarkIcon className="h-6 w-6" aria-hidden="true" />
               </button>
             </div>
+            {/* navbar  */}
             <div className="mt-6 flow-root">
               <div className="-my-6 divide-y divide-gray-500/10">
                 <div className="space-y-2 py-6">
@@ -113,6 +118,7 @@ export default function Home({ providers }) {
           </Dialog.Panel>
         </Dialog>
       </div>
+      {/*body*/}
       <main>
         <div className="relative px-6 lg:px-8">
           <div className="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">

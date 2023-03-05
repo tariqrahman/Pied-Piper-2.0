@@ -9,8 +9,9 @@ import Image from "next/image"
 const navigation = [
     { name: 'about us', href: '#' },
     { name: 'users', href: '/users' },
-    { name: 'new home page', href: '/Dashboard' }
-]
+    { name: 'new home page', href: '/newhomepage'},
+    { name: 'dashboard', href: '/dashboard'}
+  ]
 
 function Dashboard({ providers }) {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -102,7 +103,7 @@ function Dashboard({ providers }) {
             </div>
 
             {/* body */}
-            <div className="h-screen dark:bg-[#000000]">
+            <div className="h-max dark:bg-[#000000]">
                 <div className="flex mx-auto flex-col w-8/12 align-middle gap-3">
                     {/* section 1 title*/}
                     <div className="flex container flex-row text-white justify-between px-2 pt-2 text-md">
