@@ -6,7 +6,7 @@ import { getProviders, signIn, signOut } from "next-auth/react";
 const navigation = [
   { name: 'about us', href: '#' },
   { name: 'users', href: '/users' },
-  { name: 'new home page', href: '/newhomepage'},
+  { name: 'home', href: '/'},
   { name: 'dashboard', href: '/dashboard'}
 ]
 
