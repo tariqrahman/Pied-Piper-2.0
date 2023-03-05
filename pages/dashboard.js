@@ -104,7 +104,7 @@ function Dashboard({ providers }) {
             </div>
 
             {/* body */}
-            <div className="h-max dark:bg-[#000000]">
+            <div className="min-h-screen dark:bg-[#000000]">
                 <div className="flex mx-auto flex-col w-8/12 align-middle gap-3">
                     {/* section 1 title*/}
                     <div className="flex container flex-row text-white justify-between px-2 pt-2 text-md">

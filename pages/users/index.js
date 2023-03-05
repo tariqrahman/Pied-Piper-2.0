@@ -28,7 +28,7 @@ function UserList({ providers }) {
   };
 
   return (
-    <div className="h-full dark:bg-[#000000]">
+    <div className="min-h-screen dark:bg-[#000000]">
       {/** header */}
       <div className="isolate bg-black border-b border-zinc-800 text-white">
         {/*navbar container*/}

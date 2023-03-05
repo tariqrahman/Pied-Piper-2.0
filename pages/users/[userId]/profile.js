@@ -134,7 +134,7 @@ function Profile({ providers }) {
         </div>
       </div>
       {/* body */}
-      <div className="h-max dark:bg-[#000000] pb-5">
+      <div className="min-h-screen dark:bg-[#000000] pb-5">
         <div className="flex mx-auto flex-col w-8/12 align-middle gap-3">
           {/* profile header */}
           <div className="">
