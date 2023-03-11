@@ -15,7 +15,7 @@ const navigation = [
   { name: "profile", href: "/users/1234/profile" },
 ];
 
-function homePage({ providers }) {
+function Aboutus({ providers }) {
   //userid should be used to get data related to user to display on page
   const router = useRouter();
   const userId = router.query.userId;
@@ -135,30 +135,35 @@ function homePage({ providers }) {
       {/* body */}
       <div className="min-h-screen bg-black pb-5">
         <div className="flex mx-auto flex-col w-8/12 align-middle gap-3">
-          <div className="relative px-6 lg:px-8">
-            <div className="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
-              <div className="text-center">
-                <h1 className="text-4xl font-bold tracking-tight text-white sm:text-6xl">
-                  pied piper 2.0
+          <div className="relative px-2 lg:px-8">
+            <div className="mx-auto max-w-2xl py-11 ">
+              
+                <h1 className="font-bold text-center tracking-tight text-white sm:text-5xl">
+                  About Us
                 </h1>
-                <p className="mt-6 text-lg leading-8 text-cyan-400">
-                  A social networking platform based on your music taste.
+                <p className="mt-6 mb-6 text-lg text-center leading-8 text-cyan-400">
+                  Audiolink is here to provide a platform to connect with others
+                  based on their music preferences.
                 </p>
-                <div className="mt-10 flex items-center justify-center gap-x-6">
-                  <a
-                    href="#"
-                    className="rounded-md bg-sky-500 px-3.5 py-1.5 text-base font-semibold leading-7 text-white shadow-sm hover:bg-sky-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                  >
-                    Get started
-                  </a>
-                  <a
-                    href="#"
-                    className="text-base font-semibold leading-7 text-cyan-600"
-                  >
-                    Learn more <span aria-hidden="true">→</span>
-                  </a>
-                </div>
-              </div>
+                <h1 className="font-bold tracking-tight text-white sm:text-3xl">
+                  How it works
+                </h1>
+                <p className="mt-2 mb-6 text-lg leading-8 text-cyan-400">
+                  Simply log into your Spotify account and let us take care of
+                  the rest. Audiolink is here to form a common ground between
+                  people to begin conversations and possibly lead to
+                  friendships.
+                </p>
+                <h1 className="font-bold tracking-tight text-white sm:text-3xl">
+                  What is that common ground?
+                </h1>
+                <p className="mt-2 text-lg leading-8 text-cyan-400">
+                  Users you match with on Audiolink share similar top artists to
+                  you. From there, you can access their Spotify profiles and
+                  take it from there. Start exchanging playlists, songs, and
+                  even introduce new artists. Immerse yourself into new worlds
+                  of music.
+                </p>
             </div>
           </div>
         </div>
@@ -177,4 +182,4 @@ export async function getServerSideProps() {
   };
 }
 
-export default homePage;
+export default Aboutus;
