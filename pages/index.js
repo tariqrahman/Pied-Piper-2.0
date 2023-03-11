@@ -135,7 +135,7 @@ function homePage({ providers }) {
       </div>
       {/* body */}
       <div className="min-h-screen dark:bg-[#000000] pb-5">
-        <div className="flex mx-auto flex-col w-8/12 align-middle gap-3">
+        <div className="flex mx-auto flex-col container align-middle gap-3">
           <div className="relative px-6 lg:px-8">
             <div className="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
               <div className="text-center">
