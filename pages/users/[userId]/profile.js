@@ -1,26 +1,13 @@
 import { useRouter } from 'next/router';
-import { useState } from 'react';
-import { Dialog } from '@headlessui/react';
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
-import { getProviders, signIn, signOut } from 'next-auth/react';
-import Link from 'next/link';
+import { getProviders} from 'next-auth/react';
 import Image from 'next/image';
 import spotify_logo from '../../../public/spotify-icons-logos/logos/01_RGB/02_PNG/Spotify_Logo_RGB_Green.png';
-import logo from '../../../public/logo.png';
 import Layout from '@/components/layout';
-
-const navigation = [
-  { name: 'about us', href: '/aboutus' },
-  { name: 'users', href: '/users' },
-  { name: 'dashboard', href: '/dashboard' },
-  { name: 'profile', href: '/users/1234/profile' },
-];
 
 function Profile({ providers }) {
   //userid should be used to get data related to user to display on page
   const router = useRouter();
   const userId = router.query.userId;
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   //add some call to add stuff to mongodb database
   const followUser = () => {
