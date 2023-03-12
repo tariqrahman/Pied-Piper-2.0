@@ -6,9 +6,8 @@ import { useSession, signIn, signOut } from 'next-auth/react';
 import handleAlert from '@/lib/helpers';
 
 const navigation = [
-  { name: 'about us', href: '#' },
+  { name: 'about us', href: '/aboutus' },
   { name: 'users', href: '/users' },
-  { name: 'old home page', href: '/oldhomepage' },
   { name: 'dashboard', href: '/dashboard' },
   { name: 'profile', href: '/users/1234/profile' },
 ];
@@ -18,6 +17,7 @@ export default function Layout({ ...props }) {
   return (
     <>
       {/** header */}
+      
       <div className='isolate bg-black border-b border-zinc-800 text-white'>
         {/*navbar container*/}
         <div className=''>
