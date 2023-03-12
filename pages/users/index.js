@@ -9,9 +9,8 @@ import spotify_logo from "../../public/spotify-icons-logos/logos/01_RGB/02_PNG/S
 import logo from "../../public/logo.png";
 
 const navigation = [
-  { name: "about us", href: "#" },
+  { name: "about us", href: "/aboutus" },
   { name: "users", href: "/users" },
-  { name: "old home page", href: "/oldhomepage" },
   { name: "dashboard", href: "/dashboard" },
   { name: "profile", href: "/users/1234/profile" },
 ];
@@ -134,7 +133,7 @@ function UserList({ providers }) {
         </div>
       </div>
       {/* body */}
-      <div className="h-max dark:bg-[#000000] pb-5">
+      <div className="h-max bg-black pb-5">
         <div className="flex mx-auto flex-col w-8/12 align-middle gap-3">
           {/* profile header */}
           <div className="">

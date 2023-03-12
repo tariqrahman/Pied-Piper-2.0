@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import { getProviders, signIn, signOut } from "next-auth/react";
+
 import Layout from '@/components/layout';
 
 function Dashboard({ providers }) {
