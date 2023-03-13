@@ -2,10 +2,14 @@ import { useSession, signIn, signOut } from "next-auth/react";
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { getProviders } from 'next-auth/react';
-import Profile from '@/pages/users/[userId]/profile';
+import UserList from '@/pages/users/index';
 import Layout from "@/components/layout";
 
 export default function UserOnUsers({ ...props }) {
+  const followUser = () => {
+    console.log("followed user(#" + { userId } + ")");
+  };
+  
   return (
 <div className='p-1 divide-y divide-solid gap-2'>
 <div className='flex flex-row text-white justify-left text-md rounded-full py-2 divide-x divide-solid divide-cyan-400'>

@@ -3,8 +3,8 @@ import { getProviders } from "next-auth/react";
 import Image from "next/image";
 import spotify_logo from "../../../public/spotify-icons-logos/logos/01_RGB/02_PNG/Spotify_Logo_RGB_Green.png";
 import Layout from "@/components/layout";
-//import SongOnProfile from "@/components/song-onprofile";
-//import UserOnProfile from "@/components/userinfo-users";
+import SongOnProfile from "@/components/song-onprofile";
+import UserOnProfile from "@/components/userinfo-users";
 
 function Profile({ providers }) {
   //userid should be used to get data related to user to display on page
