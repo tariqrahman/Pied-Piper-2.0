@@ -22,5 +22,5 @@ export default async (req, res) => {
       res.json({ status: 200, data: allPosts });
       break;
   }
-  console.log("error");
+  //console.log("error");
 };
