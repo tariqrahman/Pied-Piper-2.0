@@ -9,6 +9,7 @@ import Link from "next/link";
 import Image from "next/image";
 import spotify_logo from "../public/spotify-icons-logos/logos/01_RGB/02_PNG/Spotify_Logo_RGB_Green.png";
 import logo from "../public/logo.png";
+import clientPromise from "@/lib/mongodb";
 
 import Layout from "@/components/layout";
 
@@ -20,12 +21,12 @@ function homePage({ providers }) {
 }
 
 
-export default function MyPage({ profileData, topTrackData, topArtistData, providers}) {
+export default function MyPage({ profileData, topTrackData, topArtistData, providers, currentUser}) {
     var userData = profileData;
     //console.log(spotifyData)
     return (
     <div>
-      <Layout providers={providers}>
+      <Layout providers={providers} currentUser={currentUser}>
       {/* body */}
       <div className="min-h-screen bg-black pb-5">
         <div className="flex mx-auto flex-col w-8/12 align-middle gap-3">
@@ -62,7 +63,19 @@ export async function getServerSideProps({req}) {
     //const SPOTIFY_TOP_TRACK_ENDPOINT = 'https://api.spotify.com/v1/me/top/tracks';
     const SPOTIFY_TOP_ARTIST_ENDPOINT = 'https://api.spotify.com/v1/me/top/artists?time_range=short_term&limit=5&offset=0';
     const access_token = session.user.accessToken;
-  
+    //current user data
+        const userId = session.user.username;
+        //console.log(current_user);
+            const client = await clientPromise;
+            const db = client.db("nextjs-mongodb-demo");
+            const options = {
+              // Include only the `display_name` and `id` fields in the returned document
+              projection: { _id: 0, display_name: 1, id: 1 },
+            };
+            const curUser = await db
+              .collection("users")
+              .findOne({id:userId},options);
+
     //profile data
     const response1 = await fetch(SPOTIFY_PROFILE_ENDPOINT, {
       headers: {
@@ -86,12 +99,15 @@ export async function getServerSideProps({req}) {
     const profileData = await response1.json();
     const topTrackData = await response2.json();
     const topArtistData = await response3.json();
-
+    const compiledData = await {profileData, topTrackData, topArtistData};
+    console.log(compiledData)
     return {
       props: {
         profileData,
         topTrackData,
         topArtistData,
+        compiledData,
+        currentUser: JSON.parse(JSON.stringify(curUser)) ,
         providers,
       },
     };

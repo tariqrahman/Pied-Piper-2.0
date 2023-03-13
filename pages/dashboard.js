@@ -1,15 +1,16 @@
 import { useState } from 'react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import { getProviders, signIn, signOut } from "next-auth/react";
-
+import { getSession } from 'next-auth/react';
+import clientPromise from '@/lib/mongodb';
 import Layout from '@/components/layout';
 import UserSimilarArtist from '@/components/user-similar-artist';
 
-function Dashboard({ providers }) {
+function Dashboard({ providers ,currentUser }) {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
     return (
         <div className="">
-            <Layout providers={providers}>
+            <Layout providers={providers} currentUser={currentUser}>
                 {/* body */}
                 <div className="min-h-screen dark:bg-[#000000]">
                     <div className="flex mx-auto flex-col w-8/12 align-middle gap-3">
@@ -85,14 +86,26 @@ function Dashboard({ providers }) {
     )
 }
 
-export async function getServerSideProps() {
+export async function getServerSideProps({req}) {
     const providers = await getProviders();
-
+    const session = await getSession({req});
+    const userId = session.user.username;
+    //console.log(current_user);
+        const client = await clientPromise;
+        const db = client.db("nextjs-mongodb-demo");
+        const options = {
+          // Include only the `display_name` and `id` fields in the returned document
+          projection: { _id: 0, display_name: 1, id: 1 },
+        };
+        const curUser = await db
+          .collection("users")
+          .findOne({id:userId},options);
     return {
-        props: {
-            providers,
-        },
-    }
-}
+      props: {
+        providers: providers,
+        currentUser: JSON.parse(JSON.stringify(curUser)) ,
+      },
+    };
+  }
 
 export default Dashboard

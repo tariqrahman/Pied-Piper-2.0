@@ -4,8 +4,10 @@ import { getProviders } from 'next-auth/react';
 import Image from 'next/image';
 import spotify_logo from '../../public/spotify-icons-logos/logos/01_RGB/02_PNG/Spotify_Logo_RGB_Green.png';
 import Layout from '@/components/layout';
+import { getSession } from 'next-auth/react';
+import clientPromise from '@/lib/mongodb';
 
-function UserList({ providers }) {
+function UserList({ providers ,currentUser }) {
   //userid should be used to get data related to user to display on page
   const router = useRouter();
   const userId = router.query.userId;
@@ -18,7 +20,7 @@ function UserList({ providers }) {
 
   return (
     <div className='min-h-screen dark:bg-[#000000]'>
-      <Layout providers={providers}>
+      <Layout providers={providers} currentUser={currentUser}>
         <div className='h-max bg-black pb-5'>
           <div className='flex mx-auto flex-col w-8/12 align-middle gap-3'>
             {/* profile header */}
@@ -283,12 +285,24 @@ function UserList({ providers }) {
   );
 }
 
-export async function getServerSideProps() {
+export async function getServerSideProps({req}) {
   const providers = await getProviders();
-
+  const session = await getSession({req});
+  const userId = session.user.username;
+  //console.log(current_user);
+      const client = await clientPromise;
+      const db = client.db("nextjs-mongodb-demo");
+      const options = {
+        // Include only the `display_name` and `id` fields in the returned document
+        projection: { _id: 0, display_name: 1, id: 1 },
+      };
+      const curUser = await db
+        .collection("users")
+        .findOne({id:userId},options);
   return {
     props: {
-      providers,
+      providers: providers,
+      currentUser: JSON.parse(JSON.stringify(curUser)) ,
     },
   };
 }

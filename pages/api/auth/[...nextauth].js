@@ -73,7 +73,7 @@ export const authOptions = {
         session.user.accessToken = token.accessToken;
         session.user.refreshToken = token.refreshToken;
         session.user.username = token.username;
-
+        console.log(token)
         return session;
     }
 
