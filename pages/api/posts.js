@@ -11,7 +11,7 @@ export default async (req, res) => {
       try {
         //let bodyObject = req.body;
         let myPost = await db
-          .collection("nextjs-mongodb-demo")
+          .collection("nextjs-mongodb-demo-2")
           .insertOne(bodyObject);
         //console.log("in posts POST CASE");
         res.json(myPost.ops[0]);
