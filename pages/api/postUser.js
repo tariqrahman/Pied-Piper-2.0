@@ -8,15 +8,15 @@ export default async (req, res) => {
     case "POST":
       //console.log(req.body);
       let bodyObject = req.body;
-      //try {
+      try {
         //let bodyObject = req.body;
         let myPost = await db
-          .collection(users)
+          .collection('users')
           .insertOne(bodyObject);
         //console.log("in posts POST CASE");
         res.json(myPost.ops[0]);
         break;
-      //} catch (e) {}
+      } catch (e) {}
     case "GET":
       const allPosts = await db.collection("users").find({}).toArray();
       res.json({ status: 200, data: allPosts });
