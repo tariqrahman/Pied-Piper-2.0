@@ -20,7 +20,7 @@ function homePage({ providers }) {
 }
 
 
-export default function MyPage({ profileData, topTrackData, providers}) {
+export default function MyPage({ profileData, topTrackData, topArtistData, providers}) {
     var userData = profileData;
     //console.log(spotifyData)
     return (
@@ -40,7 +40,7 @@ export default function MyPage({ profileData, topTrackData, providers}) {
                 </p>
                 <div className="mt-10 flex items-center justify-center gap-x-6">
                   <button className="rounded-md bg-sky-500 px-3.5 py-1.5 text-base font-semibold leading-7 text-white shadow-sm hover:bg-sky-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" 
-                  onClick={() =>generateData(profileData,topTrackData)}>
+                  onClick={() =>generateData(profileData,topTrackData, topArtistData)}>
                     get started
                     </button>
                 </div>
@@ -58,9 +58,9 @@ export async function getServerSideProps({req}) {
     const providers = await getProviders();
     const session = await getSession({req});
     const SPOTIFY_PROFILE_ENDPOINT = 'https://api.spotify.com/v1/me';
-    const SPOTIFY_TOP_TRACK_ENDPOINT = 'https://api.spotify.com/v1/me/top/tracks?limit=50&offset=0';
-    // const SPOTIFY_TOP_TRACK_ENDPOINT = 'https://api.spotify.com/v1/me/top/tracks';
-    const SPOTIFY_TOP_ARTIST_ENDPOINT = "";
+    const SPOTIFY_TOP_TRACK_ENDPOINT = 'https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=5&offset=0';
+    //const SPOTIFY_TOP_TRACK_ENDPOINT = 'https://api.spotify.com/v1/me/top/tracks';
+    const SPOTIFY_TOP_ARTIST_ENDPOINT = 'https://api.spotify.com/v1/me/top/artists?time_range=short_term&limit=5&offset=0';
     const access_token = session.user.accessToken;
   
     //profile data
@@ -75,30 +75,33 @@ export async function getServerSideProps({req}) {
         headers: {
           Authorization: `Bearer ${access_token}`,
         },
-        params: {
-            limit: 5,
-            total: 5,
-            
-
-        }
       });
       console.log(response2)
+      const response3 = await fetch(SPOTIFY_TOP_ARTIST_ENDPOINT, {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      });
+      console.log(response3)
     const profileData = await response1.json();
     const topTrackData = await response2.json();
+    const topArtistData = await response3.json();
 
     return {
       props: {
         profileData,
         topTrackData,
+        topArtistData,
         providers,
       },
     };
   }
 
-  export async function generateData(profileData,topTrackData){
+  export async function generateData(profileData,topTrackData,topArtistData){
     postUserData(profileData);
     postUserTopTracks(topTrackData);
-  }
+    postUserTopArtists(topArtistData);
+}
   
   export async function postUserData(SpotifyData){
     console.log(SpotifyData)
@@ -131,7 +134,23 @@ export async function getServerSideProps({req}) {
         "Content-Type": 
         "application/json",
       },
-      collection: "user-top-tracks",
+    });
+    const respData = await response;
+  }
+  export async function postUserTopArtists(SpotifyData){
+    
+    console.log(SpotifyData)
+    console.log("in post request func")
+    const response = await 
+    fetch("/api/postArtist", {
+      method: "POST",
+      body: JSON.stringify(SpotifyData),
+      //body: enteredData,
+      headers: 
+      {
+        "Content-Type": 
+        "application/json",
+      },
     });
     const respData = await response;
   }
