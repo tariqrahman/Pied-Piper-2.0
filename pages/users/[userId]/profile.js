@@ -8,7 +8,8 @@ import UserOnProfile from "@/components/other-user-onprofile";
 import clientPromise from "@/lib/mongodb";
 import { getSession } from "next-auth/react";
 
-function Profile({ providers, currentUser }) {
+
+function Profile({ providers, currentUser, userLikedTracks }) {
   console.log(currentUser);
   //userid should be used to get data related to user to display on page
   const router = useRouter();
@@ -32,7 +33,7 @@ function Profile({ providers, currentUser }) {
                 <div className="flex w-4/12 text-3xl pl-2 pt-2 pb-2">
                   <div className="w-auto h-auto">
                     <img
-                      className="flex shrink bg-cover lg:h-52 lg:w-52 md:h-36 md:w-36 rounded-full"
+                      className="flex shrink:0 bg-cover lg:h-52 lg:w-52 md:h-36 md:w-36 sm:h-36 sm:w-36 rounded-full"
                       src="https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80"
                       alt="logo"
                     ></img>
@@ -40,7 +41,7 @@ function Profile({ providers, currentUser }) {
                 </div>
                 {/** right */}
                 <div className="flex shrink flex-col w-9/12">
-                  <div className="lg:text-6xl md:text-4xl pt-4 pb-2 break-words">
+                  <div className="lg:text-6xl md:text-4xl sm:text-3xl pt-4 pb-2 break-words">
                     ({userId})
                   </div>
                   <button
@@ -55,18 +56,21 @@ function Profile({ providers, currentUser }) {
             {/** list of top 5 most listened tracks of the user */}
             <div>
               <div className="flex container flex-row text-white px-2 pt-2 pb-5 text-2xl">
-                <div className="flex">Top Five Tracks</div>
+                <div className="flex">Liked Tracks</div>
               </div>
               {/* follwed users carousel/scroll */}
               <div className="flex flex-col gap-3 snap-x snap-proximity">
                 {/* list elements should be dynamically created later */}
                 {/* props to pass: album cover for song, song title, artist name */}
-                <div className="flex flex-row text-white justify-between">
+                <div className="flex flex-row text-white justify-left gap-2 px-2 snap-center scroll-smooth overflow-x-auto">
+                  <SongOnProfile
+                    providers={providers}
+                    userLikedTracks={userLikedTracks}
+                  ></SongOnProfile>
+                  {/* <SongOnProfile providers={providers}></SongOnProfile>
                   <SongOnProfile providers={providers}></SongOnProfile>
                   <SongOnProfile providers={providers}></SongOnProfile>
-                  <SongOnProfile providers={providers}></SongOnProfile>
-                  <SongOnProfile providers={providers}></SongOnProfile>
-                  <SongOnProfile providers={providers}></SongOnProfile>
+                  <SongOnProfile providers={providers}></SongOnProfile> */}
                 </div>
               </div>
             </div>
@@ -115,21 +119,29 @@ function Profile({ providers, currentUser }) {
   );
 }
 
-export async function getServerSideProps({ req }) {
+export async function getServerSideProps(context) {
+  const { userId } = context.params.userId;
+  console.log(userId)
   const providers = await getProviders();
   const client = await clientPromise;
-  const session = await getSession({ req });
-  const userId = session.user.username;
+  const req = context.req;
+  const session = await getSession( {req} );
+  const UID = session.user.username;
   //get requests
-  const curUser = await getUserProfile(userId, client);
+  const curUser = await getUserProfile(UID, client);
+  const curLikedTracks = await getUserLikedSongs(UID, client);
   return {
     props: {
       providers: providers,
       currentUser: JSON.parse(JSON.stringify(curUser)),
+      // userLikedTracks: JSON.parse(JSON.stringify(curLikedTracks)),
+      userLikedTracks: JSON.parse(JSON.stringify(curLikedTracks)),
     },
   };
 }
+export default Profile;
 
+//get requests
 async function getUserProfile(UID, client) {
   const db = client.db("nextjs-mongodb-demo");
   const options = {
@@ -140,4 +152,41 @@ async function getUserProfile(UID, client) {
   return curUser;
 }
 
-export default Profile;
+// should have image, song name, artist, maybe album
+async function getUserLikedSongs(UID, client) {
+  const db = client.db("nextjs-mongodb-demo");
+  const pipeline = [
+    {
+        '$match': {
+            'id': '31o5weeyb4xi3yufm75iuegit57y'
+        }
+    }, {
+        '$replaceRoot': {
+            'newRoot': '$likedTrackData'
+        }
+    }, {
+        '$project': {
+            'items': {
+                'track': {
+                    'name': 1, 
+                    'album': {
+                        'name': 1, 
+                        'href': 1, 
+                        'images': 1
+                    }, 
+                    'artists': {
+                        'href': 1, 
+                        'name': 1
+                    }
+                }
+            }
+        }
+    }
+];
+
+  const coll = client.db("nextjs-mongodb-demo").collection("user-liked-tracks");
+  const cursor = coll.aggregate(pipeline);
+  const result = await cursor.toArray();
+
+  return result;
+}
