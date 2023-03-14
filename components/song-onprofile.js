@@ -39,12 +39,12 @@ export default function SongOnProfile({ ...props }) {
     var artistName = artistData.name;
     var artistLink = artistData.href;
     trackObj.push(
-      <div className="flex flex-col w-32 align-middle rounded-lg gap-1 min-w-min h-fit shrink-0">
-        <img className="flex h-32 bg-cover" src={imgSrc} alt="albumcover"></img>
-        <div className="flex company-text" href={albumLink}>
+      <div className="flex flex-col w-32 align-middle hover:rounded-xl gap-1 min-w-min shrink-0 hover:bg-zinc-700 hover:scale-105 ">
+        <img className=" h-32 bg-cover" src={imgSrc} alt="albumcover"></img>
+        <div className="flex text-md company-text bold" href={albumLink}>
           {trackName}
         </div>
-        <div className="flex company-text" href={artistLink}>
+        <div className="flex text-sm company-text text-zinc-400" href={artistLink}>
           {artistName}
         </div>
       </div>
