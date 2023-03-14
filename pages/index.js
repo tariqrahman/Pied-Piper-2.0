@@ -7,6 +7,7 @@ import Link from "next/link";
 import Image from "next/image";
 import spotify_logo from "../public/spotify-icons-logos/logos/01_RGB/02_PNG/Spotify_Logo_RGB_Green.png";
 import logo from "../public/logo.png";
+//import LinearGradient from 'react-native-linear-gradient';
 
 import Layout from "@/components/layout";
 
@@ -25,7 +26,9 @@ function homePage({ providers }) {
     <div>
       <Layout providers={providers}>
       {/* body */}
-      <div className="min-h-screen bg-black pb-5">
+      {/* <div className="min-h-screen bg-black pb-5"> */}
+      <div className="min-h-screen bg-black pb-5" style={{background: "linear-gradient(#000046, #1CB5E0);" }}>
+        {/* <LinearGradient colors = {['#2980B9'], ['#6DD5FA']} style = {styles.body}> */}
         <div className="flex mx-auto flex-col w-8/12 align-middle gap-3">
           <div className="relative px-6 lg:px-8">
             <div className="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
@@ -45,7 +48,7 @@ function homePage({ providers }) {
                   </a>
                   <a
                     href="#"
-                    className="text-base font-semibold leading-7 text-cyan-600"
+                    className="text-base font-semibold leading-7 text-white"
                   >
                     Learn more <span aria-hidden="true">→</span>
                   </a>
@@ -54,7 +57,7 @@ function homePage({ providers }) {
             </div>
           </div>
         </div>
-      </div>
+        </div>
     </Layout>
     </div>
   );
