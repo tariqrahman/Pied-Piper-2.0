@@ -16,6 +16,7 @@ export async function middleware(req) {
       pathname.startsWith("/api") || //  exclude all API routes
       pathname.startsWith("/static") || // exclude static files
       pathname.includes(".") || // exclude all files in the public folder
+      pathname.includes("aboutus") ||
       PUBLIC_FILE.test(pathname) || token
     
     
