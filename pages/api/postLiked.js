@@ -1,7 +1,3 @@
-/* @api/postLiked
-    - Post a user's liked tracks to database
-*/
-
 import clientPromise from "../../lib/mongodb";
 
 export default async (req, res) => {
@@ -15,7 +11,7 @@ export default async (req, res) => {
       try {
         //let bodyObject = req.body;
         let myPost = await db
-          .collection("user-liked-tracks")
+          .collection('user-liked-tracks')
           .insertOne(bodyObject);
         //console.log("in posts POST CASE");
         res.json(myPost.ops[0]);

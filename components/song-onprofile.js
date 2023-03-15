@@ -1,15 +1,15 @@
 export default function SongOnProfile({ ...props }) {
   // const userLikedTracks = props.userLikedTracks;
-  // const currentSong = props.count;
+  //const currentSong = props.count;
   // assuming we are going to need to pass a num to specify which one to show on the page
 
   const userLikedTracks = props.userLikedTracks[0];
   //holds an array of at most 10 tracks
   const trackArr = userLikedTracks.items;
-  console.log(`User Liked Tracks: ${userLikedTracks.items}`);
+  console.log(userLikedTracks.items);
   //probably use a prop to select which track to display or
   const trackOfInterest = trackArr[0].track;
-  console.log(`Track of Interest: ${trackOfInterest}`);
+  console.log(trackOfInterest);
 
   //track Obj holds image, songname, and artist
   const trackObj = [];
@@ -18,7 +18,8 @@ export default function SongOnProfile({ ...props }) {
     //cur Track is an object
     var curTrack = trackArr[i];
     var tracks = Object.values(curTrack);
-    console.log(`Track Name: ${tracks[0].name}`);
+    console.log("cur track: " + tracks);
+    console.log(tracks[0].name);
     //albumData
     var albumData = tracks[0].album;
     var albumName = albumData.name;

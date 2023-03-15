@@ -7,6 +7,7 @@ import Link from "next/link";
 import Image from "next/image";
 import spotify_logo from "../public/spotify-icons-logos/logos/01_RGB/02_PNG/Spotify_Logo_RGB_Green.png";
 import logo from "../public/logo.png";
+//import LinearGradient from 'react-native-linear-gradient';
 
 import { getSession } from "next-auth/react";
 import clientPromise from "@/lib/mongodb";
@@ -26,38 +27,40 @@ function homePage({ providers, currentUser }) {
   return (
     <div>
       <Layout providers={providers} currentUser={currentUser}>
-        {/* body */}
-        <div className="min-h-screen bg-black pb-5">
-          <div className="flex mx-auto flex-col w-8/12 align-middle gap-3">
-            <div className="relative px-6 lg:px-8">
-              <div className="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
-                <div className="text-center">
-                  <h1 className="text-4xl font-bold tracking-tight text-white sm:text-6xl">
-                    pied piper 2.0
-                  </h1>
-                  <p className="mt-6 text-lg leading-8 text-cyan-400">
-                    A social networking platform based on your music taste.
-                  </p>
-                  <div className="mt-10 flex items-center justify-center gap-x-6">
-                    <a
-                      href="#"
-                      className="rounded-md bg-sky-500 px-3.5 py-1.5 text-base font-semibold leading-7 text-white shadow-sm hover:bg-sky-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                    >
-                      Get started
-                    </a>
-                    <a
-                      href="#"
-                      className="text-base font-semibold leading-7 text-cyan-600"
-                    >
-                      Learn more <span aria-hidden="true">→</span>
-                    </a>
-                  </div>
+      {/* body */}
+      {/* <div className="min-h-screen bg-black pb-5"> */}
+      <div className="min-h-screen bg-black pb-5" style={{background: "linear-gradient(#000046 ,#1CB5E0);" }}>
+        {/* <LinearGradient colors = {['#2980B9'], ['#6DD5FA']} style = {styles.body}> */}
+        <div className="flex mx-auto flex-col w-8/12 align-middle gap-3">
+          <div className="relative px-6 lg:px-8">
+            <div className="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
+              <div className="text-center">
+                <h1 className="text-4xl font-bold tracking-tight text-white sm:text-6xl">
+                  pied piper 2.0
+                </h1>
+                <p className="mt-6 text-lg leading-8 text-cyan-400">
+                  A social networking platform based on your music taste.
+                </p>
+                <div className="mt-10 flex items-center justify-center gap-x-6">
+                  <a
+                    href="#"
+                    className="rounded-md bg-black px-3.5 py-1.5 text-base font-semibold leading-7 text-white shadow-sm hover:bg-sky-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  >
+                    Get started
+                  </a>
+                  <a
+                    href="#"
+                    className="text-base font-semibold leading-7 text-white"
+                  >
+                    Learn more <span aria-hidden="true">→</span>
+                  </a>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </Layout>
+        </div>
+    </Layout>
     </div>
   );
 }

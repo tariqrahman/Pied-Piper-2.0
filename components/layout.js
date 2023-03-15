@@ -1,13 +1,16 @@
-import { Bars3Icon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import Image from 'next/image';
 import logo from '../public/logo.png';
 import { useSession, getSession, signIn, signOut } from 'next-auth/react';
 import handleAlert from '@/lib/helpers';
+import { useState } from 'react';
+import { Dialog } from '@headlessui/react';
+import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 
 //has props provider, curUser
 export default function Layout({ ...props }) {
   const { data: session, status } = useSession();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigation = [
     { name: 'about us', href: '/aboutus' },
     { name: 'users', href: '/users' },
@@ -26,7 +29,7 @@ export default function Layout({ ...props }) {
   return (
     <>
       {/** header */}
-      
+
       <div className='isolate bg-black border-b border-zinc-800 text-white'>
         {/*navbar container*/}
         <div className=''>
@@ -53,6 +56,73 @@ export default function Layout({ ...props }) {
                 <Bars3Icon className='h-6 w-6' aria-hidden='true' />
               </button>
             </div>
+            <Dialog
+              as='div'
+              className='lg:hidden'
+              open={mobileMenuOpen}
+              onClose={setMobileMenuOpen}
+            >
+              <div className='fixed inset-0 z-50' />
+              <Dialog.Panel className='fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-sky-400 px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10'>
+                <div className='flex justify-between'>
+                  <button
+                    type='button'
+                    className='-m-2.5 rounded-md p-2.5 text-gray-700'
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <span className='sr-only'>Close menu</span>
+                    <XMarkIcon className='h-6 w-6' aria-hidden='true' />
+                  </button>
+                </div>
+                <div className='mt-6 flow-root'>
+                  <div className='-my-6 divide-y divide-gray-500/10'>
+                    <div className='space-y-2 py-6'>
+                      {navigation.map((item) => (
+                        <a
+                          key={item.name}
+                          href={item.href}
+                          className='-mx-3 block rounded-lg py-2 px-3 text-base font-semibold leading-7 text-white hover:bg-sky-800'
+                        >
+                          {item.name}
+                        </a>
+                      ))}
+                    </div>
+                    <div className='py-6'>
+                      {Object.values(props.providers).map((provider) => (
+                        <>
+                          {session && (
+                            <>
+                              <button
+                                onClick={() => {
+                                  signOut(provider.id, { callbackUrl: '/' });
+                                  handleAlert(false);
+                                }}
+                                className='-mx-3 block rounded-lg py-2.5 px-3 text-base font-semibold leading-7 text-white hover:bg-gray-50'
+                              >
+                                log out
+                              </button>
+                            </>
+                          )}
+                          {!session && (
+                            <>
+                              <button
+                                onClick={() => {
+                                  signIn(provider.id, { callbackUrl: '/' });
+                                  handleAlert(true);
+                                }}
+                                className='-mx-3 block rounded-lg py-2.5 px-3 text-base font-semibold leading-7 text-white hover:bg-gray-50'
+                              >
+                                log in
+                              </button>
+                            </>
+                          )}
+                        </>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </Dialog.Panel>
+            </Dialog>
             {/* navbar is here */}
             <div className='hidden lg:flex lg:gap-x-12'>
               {navigation.map((item) => (
@@ -74,7 +144,7 @@ export default function Layout({ ...props }) {
                         className='text-sm font-semibold leading-6 text-zinc-300'
                         onClick={() => {
                           signOut(provider.id, { callbackUrl: '/' });
-                          handleAlert();
+                          handleAlert(false);
                         }}
                       >
                         {' '}
@@ -89,6 +159,7 @@ export default function Layout({ ...props }) {
                         className='text-sm font-semibold leading-6 text-zinc-300'
                         onClick={() => {
                           signIn(provider.id, { callbackUrl: '/' });
+                          handleAlert(true);
                         }}
                       >
                         {' '}

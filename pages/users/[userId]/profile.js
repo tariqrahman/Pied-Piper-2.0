@@ -22,6 +22,7 @@ function Profile({ providers, currentUser, userLikedTracks, profileContent}) {
   };
 
   //set up variables for profile
+  console.log(profileContent)
   const userData = profileContent[0];
   const display_name = userData.display_name;
   const userLink = userData.href;
@@ -130,6 +131,7 @@ function Profile({ providers, currentUser, userLikedTracks, profileContent}) {
 
 export async function getServerSideProps(context) {
   const userId = context.params.userId;
+  console.log(userId)
   const providers = await getProviders();
   const client = await clientPromise;
   const req = context.req;
@@ -227,5 +229,6 @@ async function getUserLikedSongs(UID, client) {
   const coll = client.db("nextjs-mongodb-demo").collection("user-liked-tracks");
   const cursor = coll.aggregate(pipeline);
   const result = await cursor.toArray();
+
   return result;
 }
