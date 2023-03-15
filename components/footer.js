@@ -1,7 +1,7 @@
 const socials = [
   {
     name: 'github',
-    href: '#',
+    href: 'https://github.com/tariqrahman/Pied-Piper-2.0',
     icon: (props) => (
       <svg fill='currentColor' viewBox='0 0 24 24' {...props}>
         <path
@@ -25,16 +25,16 @@ const Footer = () => {
   return (
     <>
       <footer className='bg-black'>
-        <div className='mx-auto max-w-7xl overflow-hidden py-20 px-6 sm:py-24 lg:px-8'>
+        <div className='mx-auto max-w-7xl overflow-hidden py-20 px-6 sm:py-12 lg:px-8'>
           <nav
             className='-mb-6 columns-2 sm:flex sm:justify-center sm:space-x-12'
             aria-label='Footer'
           >
             {navigation.map((item) => (
-              <div key={item.name} className='pb-6'>
+              <div key={item.name} className='pb-2'>
                 <a
                   href={item.href}
-                  className='text-sm leading-6 text-gray-600 hover:text-gray-900'
+                  className='text-sm leading-6 text-zinc-300 hover:text-zinc-100'
                 >
                   {item.name}
                 </a>
@@ -53,8 +53,8 @@ const Footer = () => {
               </a>
             ))}
           </div>
-          <p className='mt-10 text-center text-xs leading-5 text-gray-500'>
-            &copy; 2020 Your Company, Inc. All rights reserved.
+          <p className='mt-10 text-center text-xs leading-5 text-zinc-300'>
+            &copy; 2023 Pied Piper 2.0, Inc. All rights reserved (not).
           </p>
         </div>
       </footer>
