@@ -5,9 +5,7 @@ import Image from "next/image";
 import spotify_logo from "../../public/spotify-icons-logos/logos/01_RGB/02_PNG/Spotify_Logo_RGB_Green.png";
 import Layout from "@/components/layout";
 import { getSession } from "next-auth/react";
-import {
-  UserDisplay,
-} from "@/components/list-active-users";
+import UserDisplay from "@/components/list-active-users";
 import clientPromise from "@/lib/mongodb";
 
 function UserList({ providers, currentUser, allInfo }) {
