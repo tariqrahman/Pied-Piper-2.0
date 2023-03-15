@@ -115,9 +115,12 @@ function Profile({
             </div>
             {/** list of top 5 most listened tracks of the user */}
             <div>
-              <div className="flex container flex-row text-white px-2 pt-2 pb-2 text-xl">
+              <div className="flex justify-between items-center container flex-row text-white px-2 pt-2 pb-2 text-xl">
                 <div className="flex company-text">
                   <b>Liked Tracks</b>
+                </div>
+                <div className="flex h-auto w-28 mb-1">
+                  <Image className="" src={spotify_logo} alt="spotify logo" />
                 </div>
               </div>
               {/* follwed users carousel/scroll */}

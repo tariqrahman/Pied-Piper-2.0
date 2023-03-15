@@ -6,7 +6,8 @@ import clientPromise from "@/lib/mongodb";
 import Layout from "@/components/layout";
 import UserSimilarArtist from "@/components/user-similar-artist";
 import SongsFromFollow from "@/components/dashboard-element";
-
+import spotify_logo from "../public/spotify-icons-logos/logos/01_RGB/02_PNG/Spotify_Logo_RGB_Green.png";
+import Image from "next/image";
 function Dashboard({
   providers,
   currentUser,
@@ -20,7 +21,15 @@ function Dashboard({
       <Layout providers={providers} currentUser={currentUser}>
         {/* body */}
         <div className="min-h-screen dark:bg-[#000000]">
-          <div className="flex mx-auto flex-col w-8/12 align-middle gap-3">
+          <div className="flex mx-auto flex-col w-8/12 align-middle gap-3 divide-y divide-solid divide-cyan-400">
+            <div className="flex flex-row justify-between text-3xl pt-2 pl-2 pr-2 items-center">
+                <div className="text-white company-text ">
+                    DASHBOARD
+                </div>
+                <div className="flex h-auto w-32">
+                  <Image className="" src={spotify_logo} alt="spotify logo" />
+                </div>
+            </div>
             <div>
               <div className="flex items-center container flex-row text-white justify-between company-text px-2 pt-2 pb-5 text-xl">
                 <div className="flex bolder">Tracks From Followed Users</div>
