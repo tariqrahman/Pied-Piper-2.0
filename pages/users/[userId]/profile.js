@@ -7,10 +7,20 @@ import SongOnProfile from "@/components/song-onprofile";
 import UserOnProfile from "@/components/other-user-onprofile";
 import clientPromise from "@/lib/mongodb";
 import { getSession } from "next-auth/react";
+import { list } from "postcss";
 
-function Profile({ providers, currentUser, userLikedTracks, profileContent }) {
+function Profile({
+  providers,
+  currentUser,
+  userLikedTracks,
+  profileContent,
+  followData,
+  listFollowers,
+  listFollowings,
+}) {
   console.log(currentUser);
   console.log(profileContent);
+  console.log(followData);
   //userid should be used to get data related to user to display on page
   const router = useRouter();
   const userId = router.query.userId;
@@ -18,14 +28,48 @@ function Profile({ providers, currentUser, userLikedTracks, profileContent }) {
   //adds user to curUsers follow list
   //adds curUser to other users follower list
 
-  //set up variables for profile
+  //set up variables for profile ----------
   console.log(profileContent);
   const userData = profileContent[0];
   const display_name = userData.display_name;
   const userLink = userData.href;
-  //hold image meta data
+  //hold image meta data ------------------
   const imageData = userData.images[0];
   const imgSrc = imageData.url;
+  //organize follower data ----------------
+  console.log(followData);
+  const followArr = Object.entries(followData);
+  const followDataMap = followArr[0][1];
+  console.log(followDataMap.id);
+  //cur is session user
+  const curFollowers = followDataMap.follower;
+  const curFollowings = followDataMap.following;
+  var followed = false;
+  //check if current profile is followed by session user
+  if (followDataMap.id == userId) {
+    followed = true; //override when looking at own profile
+  } else {
+    for (var i = 0; i < curFollowings.length; i++) {
+      console.log("in loop for following");
+      if (curFollowings[i] == userId) {
+        console.log("already followed this person");
+        followed = true;
+        break;
+      }
+    }
+  }
+  //list of followers
+  console.log(listFollowers);
+  console.log(listFollowers);
+  console.log(listFollowers);
+  console.log(listFollowers);
+  console.log(listFollowers);
+  console.log(listFollowers);
+  console.log(listFollowings);
+  console.log(listFollowings);
+  console.log(listFollowings);
+  console.log(listFollowings);
+  console.log(listFollowings);
 
   return (
     <div>
@@ -51,12 +95,21 @@ function Profile({ providers, currentUser, userLikedTracks, profileContent }) {
                   <div className="company-text lg:text-4xl md:text-4xl sm:text-3xl pt-4 pb-2 break-words">
                     {display_name}
                   </div>
-                  <button
-                    className="ml-1 mt-3 items-center border-solid border-2 w-28 h-7 hover:border-cyan-400 hover:text-cyan-100"
-                    onClick={() => followUser(userId, currentUser)}
-                  >
-                    Follow
-                  </button>
+                  {followed ? (
+                    <button
+                      className="ml-1 mt-3 items-center border-solid border-2 w-28 h-7 border-sky-300 text-sky-300 hover:border-cyan-400 hover:text-cyan-100 hover:bg-sky-700"
+                      onClick={console.log("unfollowed")}
+                    >
+                      Followed
+                    </button>
+                  ) : (
+                    <button
+                      className="ml-1 mt-3 items-center border-solid border-2 w-28 h-7 hover:border-cyan-400 hover:text-cyan-100"
+                      onClick={() => followUser(userId, currentUser)}
+                    >
+                      Follow
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
@@ -140,6 +193,13 @@ export async function getServerSideProps(context) {
   const curUser = await getMyProfile(UID, client);
   const curLikedTracks = await getUserLikedSongs(userId, client);
   const userContent = await getProfileOthers(userId, client);
+  const followData = await getFollowData(UID, client);
+  //list of followers to display on profile
+  const listFollowers = await getFollowerUserProfiles(userId);
+  const listFollowings = await getFollowingUserProfiles(userId);
+  // const followerProfiles = await getUsersByIds(profileFollowers);
+  // const followingProfiles = await getUsersByIds(profileFollowings);
+
   return {
     props: {
       providers: providers,
@@ -147,6 +207,9 @@ export async function getServerSideProps(context) {
       // userLikedTracks: JSON.parse(JSON.stringify(curLikedTracks)),
       userLikedTracks: JSON.parse(JSON.stringify(curLikedTracks)),
       profileContent: JSON.parse(JSON.stringify(userContent)),
+      followData: JSON.parse(JSON.stringify(followData)),
+      listFollowers: (listFollowers == null) ? null:JSON.parse(JSON.stringify(listFollowers)),
+      listFollowings: (listFollowings == null) ? null:JSON.parse(JSON.stringify(listFollowings)),
     },
   };
 }
@@ -240,13 +303,6 @@ async function getUserLikedSongs(UID, client) {
 // summary
 //  make a post request on follow button click that stores id in followers: array or something
 
-//userId holds id of user displayed on the profile,
-// export async function followUser(userId, currentUser){
-//   //post the user to the correspond session users id
-//   console.log(currentUser);
-//   console.log(userId)
-
-// }
 export async function followUser(userId, currentUser) {
   //post the user to the correspond session users id
   const curUserId = Object.values(currentUser)[1];
@@ -257,7 +313,7 @@ export async function followUser(userId, currentUser) {
   //add current user to other users followers
   const idfollowingid = {
     userId,
-    curUserId
+    curUserId,
   };
   const response1 = await fetch("/api/addFollower", {
     method: "POST",
@@ -277,18 +333,115 @@ export async function followUser(userId, currentUser) {
       "Content-Type": "application/json",
     },
   });
-  // //add other user to current users followed
-  // const followUser = {
-  //   id: curUserId,
-  //   $push: { followed_users:  userId, followers: null }, // The $set stage is an alias for ``$addFields`` stage
-  // };
-  // const response2 = await fetch('/api/follow',
-  //   {
-  //     method:"POST",
-  //     body: JSON.stringify(followUser),
-  //     headers: {
-  //     "Content-Type": "application/json",
-  //     }
-  //   }
-  // )
+}
+
+async function getFollowData(UID, client) {
+  const db = client.db("nextjs-mongodb-demo");
+  const pipeline = [
+    {
+      $match: {
+        id: UID,
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        id: 1,
+        follower: 1,
+        following: 1,
+      },
+    },
+  ];
+
+  const coll = client
+    .db("nextjs-mongodb-demo")
+    .collection("user-followed-users");
+  const cursor = coll.aggregate(pipeline);
+  const result = await cursor.toArray();
+
+  return result;
+}
+
+async function getUsersByIds(userIds, client) {
+  try {
+    const database = client.db("nextjs-mongodb-demo");
+    const users = await database
+      .collection("users")
+      .find({ id: { $in: userIds } })
+      .toArray();
+    return users;
+  } catch (error) {
+    console.error(error);
+  }
+}
+async function getFollowerUserProfiles(userId) {
+  /*
+   * Requires the MongoDB Node.js Driver
+   * https://mongodb.github.io/node-mongodb-native
+   */
+
+  const client = await clientPromise;
+
+  const pipeline = [
+    {
+      $lookup: {
+        from: "users",
+        localField: "follower",
+        foreignField: "id",
+        as: "follow_display",
+      },
+    },
+    {
+      $match: {
+        id: userId,
+      },
+    },
+    {
+      $project: {
+        _id: 1,
+        follow_display: 1,
+      },
+    },
+  ];
+  const coll = client
+    .db("nextjs-mongodb-demo")
+    .collection("user-followed-users");
+  const cursor = coll.aggregate(pipeline);
+  const result = await cursor.toArray();
+  return result;
+}
+async function getFollowingUserProfiles(userId) {
+  /*
+   * Requires the MongoDB Node.js Driver
+   * https://mongodb.github.io/node-mongodb-native
+   */
+
+  const client = await clientPromise;
+
+  const pipeline = [
+    {
+      '$lookup': {
+        'from': 'users', 
+        'localField': 'following', 
+        'foreignField': 'id', 
+        'as': 'follow_display'
+      }
+    }, {
+      '$match': {
+        'id': userId,
+      }
+    }, {
+      '$project': {
+        '_id': 1, 
+        'follow_display': 1
+      }
+    }
+  ];
+  const coll = client
+    .db("nextjs-mongodb-demo")
+    .collection("user-followed-users");
+  const cursor = coll.aggregate(pipeline);
+  const result = await cursor.toArray();
+  console.log(result);
+  return result;
 }
