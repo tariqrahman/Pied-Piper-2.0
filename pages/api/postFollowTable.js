@@ -13,13 +13,13 @@ export default async (req, res) => {
         try {
       let bodyObject = req.body;
         let myPost = await db
-          .collection("user-follow-users")
+          .collection("user-followed-users")
           .insertOne(bodyObject);
           res.status(200).json({ success: true });
           console.log(res)
         break;
       } catch (e) {
-        res.status(500).json({ success: false});
+        res.json({ success: false});
 
       }
   }

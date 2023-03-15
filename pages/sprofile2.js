@@ -130,8 +130,8 @@ export async function getServerSideProps({ req }) {
   const likedTrackData = await response4.json();
   const emptyTable = {
     id: userId,
-    followers: [],
-    followed_users: []
+    follower: [],
+    following: []
   };
   const followerTable = JSON.stringify(emptyTable);
 //   const result = await client.db("nextjs-mongodb-demo")
