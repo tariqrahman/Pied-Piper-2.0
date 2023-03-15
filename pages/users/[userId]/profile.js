@@ -8,6 +8,7 @@ import UserOnProfile from "@/components/other-user-onprofile";
 import clientPromise from "@/lib/mongodb";
 import { getSession } from "next-auth/react";
 import { list } from "postcss";
+import { useState } from "react";
 
 function Profile({
   providers,
@@ -45,9 +46,10 @@ function Profile({
   const curFollowers = followDataMap.follower;
   const curFollowings = followDataMap.following;
   var followed = false;
+  var ownProfile = false;
   //check if current profile is followed by session user
   if (followDataMap.id == userId) {
-    followed = true; //override when looking at own profile
+    ownProfile = true; //override when looking at own profile
   } else {
     for (var i = 0; i < curFollowings.length; i++) {
       console.log("in loop for following");
@@ -58,19 +60,18 @@ function Profile({
       }
     }
   }
-  //list of followers
-  console.log(listFollowers);
-  console.log(listFollowers);
-  console.log(listFollowers);
-  console.log(listFollowers);
-  console.log(listFollowers);
-  console.log(listFollowers);
-  console.log(listFollowings);
-  console.log(listFollowings);
-  console.log(listFollowings);
-  console.log(listFollowings);
-  console.log(listFollowings);
-
+  
+  const [followStatus, setFollowStatus] = useState(followed ? "Follow":"Unfollow");
+  const handleClick = () => {
+    if(followStatus == "Follow"){
+      followed = !followed;
+      setFollowStatus("Unfollow");
+    }
+    if(followStatus == "Unfollow"){
+      followed = !followed;
+      setFollowStatus("Follow")
+    }
+  };
   return (
     <div>
       <Layout providers={providers} currentUser={currentUser}>
@@ -95,19 +96,20 @@ function Profile({
                   <div className="company-text lg:text-4xl md:text-4xl sm:text-3xl text-2xl pt-4 pb-2 break-words">
                     {display_name}
                   </div>
-                  {followed ? (
+                  
+                  {ownProfile ? (<></>): followed ? (
                     <button
                       className="ml-1 mt-3 items-center border-solid border-2 w-28 h-7 border-sky-300 text-sky-300 hover:border-cyan-400 hover:text-cyan-100 hover:bg-sky-700"
-                      onClick={console.log("unfollowed")}
+                      onClick={() => {unfollowUser(userId, currentUser); handleClick()}}
                     >
-                      Followed
+                      {followStatus}
                     </button>
                   ) : (
                     <button
                       className="ml-1 mt-3 items-center border-solid border-2 w-28 h-7 hover:border-cyan-400 hover:text-cyan-100"
-                      onClick={() => followUser(userId, currentUser)}
+                      onClick={() => {followUser(userId, currentUser); handleClick()}}
                     >
-                      Follow
+                      {followStatus}
                     </button>
                   )}
                 </div>
@@ -316,6 +318,38 @@ export async function followUser(userId, currentUser) {
     userId,
   };
   const response2 = await fetch("/api/startFollowing", {
+    method: "POST",
+    body: JSON.stringify(id1followid2),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+}
+
+export async function unfollowUser(userId, currentUser) {
+  //post the user to the correspond session users id
+  const curUserId = Object.values(currentUser)[1];
+  console.log(curUserId);
+  console.log(userId);
+  console.log("followed user(#" + { userId } + ")");
+  //then need to do corresponding follow operations
+  //add current user to other users followers
+  const idfollowingid = {
+    userId,
+    curUserId,
+  };
+  const response1 = await fetch("/api/removeFollower", {
+    method: "POST",
+    body: JSON.stringify(idfollowingid),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const id1followid2 = {
+    curUserId,
+    userId,
+  };
+  const response2 = await fetch("/api/stopFollowing", {
     method: "POST",
     body: JSON.stringify(id1followid2),
     headers: {
