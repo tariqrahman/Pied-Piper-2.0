@@ -33,7 +33,7 @@ export default function Layout({ ...props }) {
               <Link href='/' className=' -m-1.5 p-1.5'>
                 <div className='flex flex-row items-center gap-2.5'>
                   <Image className='flex' src={logo} alt='company logo' />
-                  <div className='flex text-xl company-text'>AudioLink</div>
+                  <div className='flex text-xl'>pied piper 2.0</div>
                 </div>
               </Link>
             </div>

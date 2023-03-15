@@ -23,7 +23,7 @@ function UserList({ providers }) {
           <div className='flex mx-auto flex-col w-8/12 align-middle gap-3'>
             {/* profile header */}
             <div className=''>
-              <div className='flex container flex-row text-white justify-between px-2 pt-3 text-md'>
+              <div className='flex container flex-row text-zinc-300 justify-between px-2 pt-3 text-md'>
                 {/** left */}
                 <div className='text-3xl'>List of Active Users</div>
                 {/** right */}
@@ -34,7 +34,7 @@ function UserList({ providers }) {
             </div>
             {/** profile image, username/details, follow button*/}
             <div className='p-1 divide-y divide-solid gap-2'>
-              <div className='flex flex-row text-white justify-left text-md rounded-full py-2 divide-x divide-solid divide-cyan-400'>
+              <div className='flex flex-row text-zinc-300 justify-left text-md rounded-full py-2 divide-x divide-solid divide-cyan-400'>
                 {/** left user profile image*/}
                 <div className='flex items-center w-2/12 shrink-0 text-3xl pt-2 pb-2'>
                   <div className='flex justify-center h-fit'>
@@ -67,13 +67,13 @@ function UserList({ providers }) {
 
                     {/** tracks pertaining to user */}
                     <div className='ml-2 p-1 pb-2 divide-y divide-solid divide-zinc-700 '>
-                      <div className='flex container flex-row text-white justify-between mb-1 text-md'>
+                      <div className='flex container flex-row text-zinc-300 justify-between mb-1 text-md'>
                         <div className='flex'>Most Listened Tracks</div>
                         <div className='flex text-blue-400 '></div>
                       </div>
                       {/** dynamically pull top 3 songs from spotify based on user */}
                       {/* list of top 3 most listened tracks */}
-                      <div className=' flex flex-col text-white justify-left gap-2 px-2 divide-y divide-solid divide-zinc-900'>
+                      <div className=' flex flex-col text-zinc-300 justify-left gap-2 px-2 divide-y divide-solid divide-zinc-900'>
                         <div className='flex flex-row items-center gap-2 h-fit shrink-0 pt-0.5'>
                           <img
                             className='h-8 w-8'
@@ -114,7 +114,7 @@ function UserList({ providers }) {
               </div>
             </div>
             <div className='p-1 divide-y divide-solid gap-2'>
-              <div className='flex flex-row text-white justify-left text-md rounded-full py-2 divide-x divide-solid divide-cyan-400'>
+              <div className='flex flex-row text-zinc-300 justify-left text-md rounded-full py-2 divide-x divide-solid divide-cyan-400'>
                 {/** left user profile image*/}
                 <div className='flex items-center w-2/12 shrink-0 text-3xl pt-2 pb-2'>
                   <div className='flex justify-center h-fit'>
@@ -147,13 +147,13 @@ function UserList({ providers }) {
 
                     {/** tracks pertaining to user */}
                     <div className='ml-2 p-1 pb-2 divide-y divide-solid divide-zinc-700 '>
-                      <div className='flex container flex-row text-white justify-between mb-1 text-md'>
+                      <div className='flex container flex-row text-zinc-300 justify-between mb-1 text-md'>
                         <div className='flex'>Most Listened Tracks</div>
                         <div className='flex text-blue-400 '></div>
                       </div>
                       {/** dynamically pull top 3 songs from spotify based on user */}
                       {/* list of top 3 most listened tracks */}
-                      <div className=' flex flex-col text-white justify-left gap-2 px-2 divide-y divide-solid divide-zinc-900'>
+                      <div className=' flex flex-col text-zinc-300 justify-left gap-2 px-2 divide-y divide-solid divide-zinc-900'>
                         <div className='flex flex-row items-center gap-2 h-fit shrink-0 pt-0.5'>
                           <img
                             className='h-8 w-8'
@@ -194,7 +194,7 @@ function UserList({ providers }) {
               </div>
             </div>
             <div className='p-1 divide-y divide-solid gap-2'>
-              <div className='flex flex-row text-white justify-left text-md rounded-full py-2 divide-x divide-solid divide-cyan-400'>
+              <div className='flex flex-row text-zinc-300 justify-left text-md rounded-full py-2 divide-x divide-solid divide-cyan-400'>
                 {/** left user profile image*/}
                 <div className='flex items-center w-2/12 shrink-0 text-3xl pt-2 pb-2'>
                   <div className='flex justify-center h-fit'>
@@ -227,13 +227,13 @@ function UserList({ providers }) {
 
                     {/** tracks pertaining to user */}
                     <div className='ml-2 p-1 pb-2 divide-y divide-solid divide-zinc-700 '>
-                      <div className='flex container flex-row text-white justify-between mb-1 text-md'>
+                      <div className='flex container flex-row text-zinc-300 justify-between mb-1 text-md'>
                         <div className='flex'>Most Listened Tracks</div>
                         <div className='flex text-blue-400 '></div>
                       </div>
                       {/** dynamically pull top 3 songs from spotify based on user */}
                       {/* list of top 3 most listened tracks */}
-                      <div className=' flex flex-col text-white justify-left gap-2 px-2 divide-y divide-solid divide-zinc-900'>
+                      <div className=' flex flex-col text-zinc-300 justify-left gap-2 px-2 divide-y divide-solid divide-zinc-900'>
                         <div className='flex flex-row items-center gap-2 h-fit shrink-0 pt-0.5'>
                           <img
                             className='h-8 w-8'
