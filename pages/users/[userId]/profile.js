@@ -82,7 +82,7 @@ function Profile({
           <div className="flex mx-auto flex-col w-8/12 align-middle gap-3">
             {/** profile image, username/details, follow button*/}
             <div className="">
-              <div className="flex container flex-row text-zinc-300 justify-left pt-3 text-md">
+              <div className="flex container flex-row text-zinc-300 justify-left pt-3 text-md pt-4 xl:text-6xl xl:pt-12 lg:text-5xl lg:pt-10  md:text-4xl sm:text-3xl text-2xl pt-4 pb-2 break-words">
                 {/** left */}
                 <div className="flex w-4/12 text-3xl pl-2 pt-2 pb-2">
                   <div className="w-auto h-auto">
@@ -94,8 +94,8 @@ function Profile({
                   </div>
                 </div>
                 {/** right */}
-                <div className="flex shrink flex-col w-9/12">
-                  <div className="company-text lg:text-4xl md:text-4xl sm:text-3xl text-2xl pt-4 pb-2 break-words">
+                <div className="flex shrink flex-col w-9/12 pt-4">
+                  <div className="company-text ">
                     {display_name}
                   </div>
                   
