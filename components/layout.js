@@ -16,7 +16,7 @@ export default function Layout({ ...props }) {
     { name: 'users', href: '/users' },
     { name: 'dashboard', href: '/dashboard' },
   ];
-  if (session) {
+  if (session && props.currentUser != null) {
     const username = Object.entries(props.currentUser)[1][1];
     const test = Object.entries(props.currentUser).map((user) => user.id);
     console.log('test output' + test);
