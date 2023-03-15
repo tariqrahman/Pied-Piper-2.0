@@ -3,6 +3,7 @@ import { getProviders } from "next-auth/react";
 import Image from "next/image";
 import spotify_logo from "../../../public/spotify-icons-logos/logos/01_RGB/02_PNG/Spotify_Logo_RGB_Green.png";
 import Layout from "@/components/layout";
+import Footer from "@/components/footer";
 import SongOnProfile from "@/components/song-onprofile";
 import UserOnProfile from "@/components/other-user-onprofile";
 import clientPromise from "@/lib/mongodb";
@@ -125,6 +126,7 @@ function Profile({ providers, currentUser, userLikedTracks, profileContent}) {
           </div>
         </div>
       </Layout>
+      <Footer />
     </div>
   );
 }

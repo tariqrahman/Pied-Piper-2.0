@@ -5,6 +5,7 @@ import { getSession } from "next-auth/react";
 import clientPromise from "@/lib/mongodb";
 import Layout from "@/components/layout";
 import UserSimilarArtist from "@/components/user-similar-artist";
+import Footer from "@/components/footer";
 
 function Dashboard({ providers, currentUser }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -79,6 +80,7 @@ function Dashboard({ providers, currentUser }) {
                     </div> */}
         </div>
       </Layout>
+      <Footer />
     </div>
   );
 }

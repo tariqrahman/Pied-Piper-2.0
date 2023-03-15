@@ -59,7 +59,7 @@ function Aboutus({ providers, currentUser }) {
           </div>
         </div>
       </Layout>
-      <Footer></Footer>
+      <Footer />
     </div>
   );
 }
