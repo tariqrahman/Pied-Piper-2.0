@@ -10,6 +10,7 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 //has props provider, curUser
 export default function Layout({ ...props }) {
   const { data: session, status } = useSession();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigation = [
     { name: 'about us', href: '/aboutus' },
     { name: 'users', href: '/users' },
