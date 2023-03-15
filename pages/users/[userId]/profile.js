@@ -232,3 +232,9 @@ async function getUserLikedSongs(UID, client) {
 
   return result;
 }
+
+
+//profile has follow button
+// make onClick where, it adds route(other users id) to current session UID in database
+// summary
+//  make a post request on follow button click that stores id in followers: array or something

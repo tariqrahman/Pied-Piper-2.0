@@ -14,9 +14,12 @@ export default async (req, res) => {
           .collection('user-liked-tracks')
           .insertOne(bodyObject);
         //console.log("in posts POST CASE");
-        res.json(myPost.ops[0]);
+        // res.json(myPost.ops[0]);
+        res.status(200).json({ success: true });
         break;
-      } catch (e) {}
+      } catch (e) {
+          res.status(500).json({ success: false });
+      }
   }
   //console.log("error");
 };
