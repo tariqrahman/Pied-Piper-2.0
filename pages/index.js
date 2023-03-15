@@ -72,7 +72,11 @@ function homePage({ providers }) {
         {/* body */}
         {/* <div className="min-h-screen bg-black pb-5"> */}
         <div
-          className="min-h-screen bg-black pb-5"
+          className="min-h-screen bg-black pb-5 bg-gradient-to-r
+          from-blue-500
+          via-blue-700
+          to-blue-900
+          background-animate"
         >
           {/* <LinearGradient colors = {['#2980B9'], ['#6DD5FA']} style = {styles.body}> */}
           <div className="flex mx-auto flex-col w-8/12 align-middle gap-3">
@@ -82,21 +86,15 @@ function homePage({ providers }) {
                   <h1 className="text-4xl font-bold tracking-tight text-zinc-300 sm:text-6xl">
                     pied piper 2.0
                   </h1>
-                  <p className="mt-6 text-lg leading-8 text-cyan-400">
-                    A social networking platform based on your music taste.
+                  <p className="mt-6 text-lg leading-8 text-white">
+                    a social networking platform based on your music taste
                   </p>
                   <div className="mt-10 flex items-center justify-center gap-x-6">
                     <a
                       onClick={scrollToBottom}
-                      className="rounded-md bg-black px-3.5 py-1.5 text-base font-semibold leading-7 text-zinc-300 shadow-sm hover:bg-sky-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                      className="border-white border-2 px-3.5 py-1.5 rounded-2xl text-base font-semibold leading-7 text-white"
                     >
-                      Features
-                    </a>
-                    <a
-                      href="/aboutus"
-                      className="text-base font-semibold leading-7 text-zinc-300"
-                    >
-                      Learn more <span aria-hidden="true">→</span>
+                      learn more <span aria-hidden="true">↓</span>
                     </a>
                   </div>
                 </div>
@@ -108,7 +106,7 @@ function homePage({ providers }) {
                 <p className="mt-2 text-3xl font-bold tracking-tight text-zinc-300 sm:text-4xl">
                   Implementation Spec
                 </p>
-                <p className="mt-6 text-lg leading-8 text-cyan-400">
+                <p className="mt-6 text-lg leading-8 text-white">
                   Learn about our web application and the implemented features designed to make for a pleasant music discovery experience
                 </p>
               </div>
