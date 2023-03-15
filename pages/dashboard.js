@@ -5,6 +5,8 @@ import { getSession } from "next-auth/react";
 import clientPromise from "@/lib/mongodb";
 import Layout from "@/components/layout";
 import UserSimilarArtist from "@/components/user-similar-artist";
+
+import Footer from "@/components/footer";
 import SongsFromFollow from "@/components/dashboard-element";
 import spotify_logo from "../public/spotify-icons-logos/logos/01_RGB/02_PNG/Spotify_Logo_RGB_Green.png";
 import Image from "next/image";
@@ -63,13 +65,16 @@ function Dashboard({
             </div>
             {/* section 1 title
             <div className="flex container flex-row text-white justify-between px-2 pt-5 pb-3 text-lg">
+
               <div className="flex">Users with similar interest</div>
               <div className="flex text-blue-400 ">Show More</div>
             </div> */}
             {/* section 1 elements */}
+
             {/* <div className="flex flex-col gap-3"> */}
             {/* list elements should be dynamically created later */}
             {/* <div className="flex flex-row flex-wrap text-white justify-between  gap-2.5 ">
+
                 <UserSimilarArtist providers={providers}></UserSimilarArtist>
               </div>
             </div>
@@ -125,6 +130,7 @@ function Dashboard({
                     </div> */}
         </div>
       </Layout>
+      <Footer />
     </div>
   );
 }

@@ -3,6 +3,7 @@ import { getProviders } from "next-auth/react";
 import Image from "next/image";
 import spotify_logo from "../../../public/spotify-icons-logos/logos/01_RGB/02_PNG/Spotify_Logo_RGB_Green.png";
 import Layout from "@/components/layout";
+import Footer from "@/components/footer";
 import SongOnProfile from "@/components/song-onprofile";
 import UserOnProfile from "@/components/other-user-onprofile";
 import clientPromise from "@/lib/mongodb";
@@ -81,7 +82,7 @@ function Profile({
           <div className="flex mx-auto flex-col w-8/12 align-middle gap-3">
             {/** profile image, username/details, follow button*/}
             <div className="">
-              <div className="flex container flex-row text-white justify-left pt-9 text-md">
+              <div className="flex container flex-row text-zinc-300 justify-left pt-3 text-md">
                 {/** left */}
                 <div className="flex w-4/12 text-3xl pl-2 pt-2 pb-2">
                   <div className="w-auto h-auto">
@@ -118,6 +119,7 @@ function Profile({
             </div>
             {/** list of top 5 most listened tracks of the user */}
             <div>
+
               <div className="flex justify-between items-center container flex-row text-white px-2 pt-2 pb-2 text-xl">
                 <div className="flex company-text">
                   <b>Liked Tracks</b>
@@ -125,12 +127,13 @@ function Profile({
                 <div className="flex h-auto w-28 mb-1">
                   <Image className="" src={spotify_logo} alt="spotify logo" />
                 </div>
+
               </div>
               {/* follwed users carousel/scroll */}
               <div className="flex flex-col gap-3 snap-x snap-proximity">
                 {/* list elements should be dynamically created later */}
                 {/* props to pass: album cover for song, song title, artist name */}
-                <div className="flex flex-row text-white justify-left gap-3 px-2 snap-center scroll-smooth overflow-x-auto h-56">
+                <div className="flex flex-row text-zinc-300 justify-left gap-3 px-2 snap-center scroll-smooth overflow-x-auto h-56">
                   <SongOnProfile
                     providers={providers}
                     userLikedTracks={userLikedTracks}
@@ -140,21 +143,26 @@ function Profile({
             </div>
             {/* followed list */}
             <div>
+
               <div className="flex items-center container flex-row text-white justify-between company-text px-2 pt-2 pb-5 text-xl">
                 <div className="flex bolder">Following</div>
                 <div className="flex text-blue-400 text-sm">Show More</div>
+
               </div>
               {/* follwed users carousel/scroll */}
               <div className="flex flex-col gap-3 snap-x snap-proximity">
                 {/* list elements should be dynamically created later */}
                 {/* props to pass: username, profile picture */}
+
                 <div className="flex flex-row text-white justify-left gap-10 px-2 snap-center scroll-smooth overflow-x-auto h-42">
                   <UserOnProfile providers={providers} userlist={listFollowings}></UserOnProfile>
+
                 </div>
               </div>
             </div>
             {/* followers list */}
             <div>
+
             <div className="flex items-center container flex-row text-white justify-between company-text px-2 pt-2 pb-5 text-xl">
                 <div className="flex bolder">Followers</div>
                 <div className="flex text-blue-400 text-sm">Show More</div>
@@ -163,12 +171,14 @@ function Profile({
                 {/* list elements should be dynamically created later */}
                 <div className="flex flex-row text-white justify-left gap-10 px-2 snap-center scroll-smooth overflow-x-auto h-42">
                   <UserOnProfile providers={providers} userlist={listFollowers}></UserOnProfile>
+
                 </div>
               </div>
             </div>
           </div>
         </div>
       </Layout>
+      <Footer />
     </div>
   );
 }

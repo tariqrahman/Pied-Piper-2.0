@@ -4,9 +4,9 @@ import { useSession, signIn, signOut } from "next-auth/react";
 export default function UserSimilarArtist({ ...props }) {
   return (
     <>
-      <div className="flex flex-row align-middle rounded-lg bg-zinc-800 p-2 gap-2 grow">
+      <div className="flex flex-row align-middle rounded-lg p-2 gap-2 grow">
         <img
-          className="h-20 bg-cover w-20 rounded-lg"
+          className="h-20 bg-cover w-20 rounded-full "
           src="https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80"
           alt="logo"
         ></img>
