@@ -1,4 +1,3 @@
-
 import Link from 'next/link';
 import Image from 'next/image';
 import logo from '../public/logo.png';
@@ -16,89 +15,88 @@ export default function Layout({ ...props }) {
     { name: 'about us', href: '/aboutus' },
     { name: 'users', href: '/users' },
     { name: 'dashboard', href: '/dashboard' },
-    { name: "profile", href: "/users/1234/profile" },
   ];
-  if(session){
-  const username = Object.entries(props.currentUser)[1][1];
-  const test = Object.entries(props.currentUser).map(user => user.id);
-  console.log('test output' + test)
+  if (session) {
+    const username = Object.entries(props.currentUser)[1][1];
+    const test = Object.entries(props.currentUser).map((user) => user.id);
+    console.log('test output' + test);
     console.log(username);
     navigation.push({ name: 'profile', href: `/users/${username}/profile` });
-  }else{
+  } else {
     navigation.push({ name: 'profile', href: `/users/notlogged/profile` });
   }
   return (
     <>
       {/** header */}
 
-      <div className="isolate bg-zinc-900 text-zinc-300 border-b border-zinc-300">
+      <div className='isolate bg-zinc-900 text-zinc-300 border-b border-zinc-300'>
         {/*navbar container*/}
-        <div className="">
+        <div className=''>
           {/* navbar header */}
           <nav
-            className="flex items-center justify-between py-3 px-10"
-            aria-label="Global"
+            className='flex items-center justify-between py-3 px-10'
+            aria-label='Global'
           >
-            <div className="flex lg:flex-1 cursor-pointer">
-              <Link href="/" className=" -m-1.5 p-1.5">
-                <div className="flex flex-row items-center gap-2.5">
-                  <Image className="flex" src={logo} alt="company logo" />
-                  <div className="flex text-xl">pied piper 2.0</div>
+            <div className='flex lg:flex-1 cursor-pointer'>
+              <Link href='/' className=' -m-1.5 p-1.5'>
+                <div className='flex flex-row items-center gap-2.5'>
+                  <Image className='flex' src={logo} alt='company logo' />
+                  <div className='flex text-xl'>pied piper 2.0</div>
                 </div>
               </Link>
             </div>
-            <div className="flex lg:hidden">
+            <div className='flex lg:hidden'>
               <button
-                type="button"
-                className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-zinc-300 hover:scale-125"
+                type='button'
+                className='-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-zinc-300 hover:scale-125'
                 onClick={() => setMobileMenuOpen(true)}
               >
-                <span className="sr-only">Open main menu</span>
-                <Bars3Icon className="h-6 w-6" aria-hidden="true" />
+                <span className='sr-only'>Open main menu</span>
+                <Bars3Icon className='h-6 w-6' aria-hidden='true' />
               </button>
             </div>
             <Dialog
-              as="div"
-              className="lg:hidden"
+              as='div'
+              className='lg:hidden'
               open={mobileMenuOpen}
               onClose={setMobileMenuOpen}
             >
-              <div className="fixed inset-0 z-50" />
-              <Dialog.Panel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-zinc-900 opacity-90 px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
-                <div className="flex justify-between">
+              <div className='fixed inset-0 z-50' />
+              <Dialog.Panel className='fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-zinc-900 opacity-90 px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10'>
+                <div className='flex justify-between'>
                   <button
-                    type="button"
-                    className="-m-2.5 rounded-md p-2.5 text-gray-700 hover:scale-125"
+                    type='button'
+                    className='-m-2.5 rounded-md p-2.5 text-gray-700 hover:scale-125'
                     onClick={() => setMobileMenuOpen(false)}
                   >
-                    <span className="sr-only">Close menu</span>
-                    <XMarkIcon className="h-6 w-6" aria-hidden="true" />
+                    <span className='sr-only'>Close menu</span>
+                    <XMarkIcon className='h-6 w-6' aria-hidden='true' />
                   </button>
                 </div>
-                <div className="mt-6 flow-root">
-                  <div className="-my-6 divide-y divide-white-500/10">
-                    <div className="space-y-2 py-6">
+                <div className='mt-6 flow-root'>
+                  <div className='-my-6 divide-y divide-white-500/10'>
+                    <div className='space-y-2 py-6'>
                       {navigation.map((item) => (
                         <a
                           key={item.name}
                           href={item.href}
-                          className="-mx-3 block rounded-lg py-2 px-3 text-base font-semibold leading-7 text-white hover:bg-gray-800"
+                          className='-mx-3 block rounded-lg py-2 px-3 text-base font-semibold leading-7 text-white hover:bg-gray-800'
                         >
                           {item.name}
                         </a>
                       ))}
                     </div>
-                    <div className="py-6">
+                    <div className='py-6'>
                       {Object.values(props.providers).map((provider) => (
                         <>
                           {session && (
                             <>
                               <button
                                 onClick={() => {
-                                  signOut(provider.id, { callbackUrl: "/" });
+                                  signOut(provider.id, { callbackUrl: '/' });
                                   handleAlert(false);
                                 }}
-                                className="-mx-3 block rounded-lg py-2.5 px-3 text-base font-semibold leading-7 text-white hover:bg-gray-800"
+                                className='-mx-3 block rounded-lg py-2.5 px-3 text-base font-semibold leading-7 text-white hover:bg-gray-800'
                               >
                                 log out
                               </button>
@@ -108,10 +106,10 @@ export default function Layout({ ...props }) {
                             <>
                               <button
                                 onClick={() => {
-                                  signIn(provider.id, { callbackUrl: "/" });
+                                  signIn(provider.id, { callbackUrl: '/' });
                                   handleAlert(true);
                                 }}
-                                className="-mx-3 block rounded-lg py-2.5 px-3 text-base font-semibold leading-7 text-white hover:bg-gray-800"
+                                className='-mx-3 block rounded-lg py-2.5 px-3 text-base font-semibold leading-7 text-white hover:bg-gray-800'
                               >
                                 log in
                               </button>
@@ -125,31 +123,31 @@ export default function Layout({ ...props }) {
               </Dialog.Panel>
             </Dialog>
             {/* navbar is here */}
-            <div className="hidden lg:flex lg:gap-x-12">
+            <div className='hidden lg:flex lg:gap-x-12'>
               {navigation.map((item) => (
                 <a
                   key={item.name}
                   href={item.href}
-                  className="text-sm font-semibold leading-6 text-zinc-300 hover:text-gray-600"
+                  className='text-sm font-semibold leading-6 text-zinc-300 hover:text-gray-600'
                 >
                   {item.name}
                 </a>
               ))}
             </div>
-            <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+            <div className='hidden lg:flex lg:flex-1 lg:justify-end'>
               {Object.values(props.providers).map((provider) => (
                 <div key={provider.name}>
                   {session && (
                     <>
                       <button
-                        className="text-sm font-semibold leading-6 text-zinc-300 hover:text-gray-600"
+                        className='text-sm font-semibold leading-6 text-zinc-300 hover:text-gray-600'
                         onClick={() => {
-                          signOut(provider.id, { callbackUrl: "/" });
+                          signOut(provider.id, { callbackUrl: '/' });
                           handleAlert(false);
                         }}
                       >
-                        {" "}
-                        log out <span aria-hidden="true">&rarr;</span>
+                        {' '}
+                        log out <span aria-hidden='true'>&rarr;</span>
                       </button>
                     </>
                   )}
@@ -157,14 +155,14 @@ export default function Layout({ ...props }) {
                   {!session && (
                     <>
                       <button
-                        className="text-sm font-semibold leading-6 text-zinc-300 hover:text-gray-600"
+                        className='text-sm font-semibold leading-6 text-zinc-300 hover:text-gray-600'
                         onClick={() => {
-                          signIn(provider.id, { callbackUrl: "/" });
+                          signIn(provider.id, { callbackUrl: '/' });
                           handleAlert(true);
                         }}
                       >
-                        {" "}
-                        log in <span aria-hidden="true">&rarr;</span>
+                        {' '}
+                        log in <span aria-hidden='true'>&rarr;</span>
                       </button>
                     </>
                   )}
@@ -199,9 +197,8 @@ export default function Layout({ ...props }) {
 
 //   return {
 //     props: {
-      
+
 //       userData,
 //     }
 //   }
 // }
-
