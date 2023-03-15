@@ -129,19 +129,18 @@ export async function getServerSideProps({ req }) {
   const topArtistData = await response3.json();
   const likedTrackData = await response4.json();
   const emptyTable = {
-    'id': userId,
-    'followers': [],
-    'followed_users': []
+    id: userId,
+    followers: [],
+    followed_users: []
   };
   const followerTable = JSON.stringify(emptyTable);
-  //const client2 = clientPromise;
-  //const result = await client2.db("nextjs-mongodb-demo")
-                // .collection('user-followed-users')
-                // .insertOne({
-                //     id: userId,
-                //     followers: [],
-                //     followed_users: []
-                // });
+//   const result = await client.db("nextjs-mongodb-demo")
+//                  .collection('user-followed-users')
+//                  .insertOne({
+//                      id: userId,
+//                      followers: [],
+//                      followed_users: []
+//                  });
     
         
   //append user id for later identification
@@ -233,7 +232,7 @@ export async function postLikedTracks(SpotifyData) {
 export async function postInitialFollowTable(emptyTable) {
   console.log(emptyTable);
   console.log("in post request func");
-  const response = await fetch("/api/postFollowInitial", {
+  const response = await fetch("/api/postFollowTable/", {
     method: "POST",
     body: emptyTable,
     //body: enteredData,
