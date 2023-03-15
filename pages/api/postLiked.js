@@ -1,5 +1,5 @@
-/* @api/postArtist
-    - Post a user's top artists to database
+/* @api/postLiked
+    - Post a user's liked tracks to database
 */
 
 import clientPromise from "../../lib/mongodb";
@@ -15,16 +15,12 @@ export default async (req, res) => {
       try {
         //let bodyObject = req.body;
         let myPost = await db
-          .collection('users-top-artist')
+          .collection("user-liked-tracks")
           .insertOne(bodyObject);
         //console.log("in posts POST CASE");
         res.json(myPost.ops[0]);
         break;
       } catch (e) {}
-    case "GET":
-      const allPosts = await db.collection("users").find({}).toArray();
-      res.json({ status: 200, data: allPosts });
-      break;
   }
   //console.log("error");
 };

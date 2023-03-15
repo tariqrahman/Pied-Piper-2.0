@@ -15,9 +15,8 @@ export default function Layout({ ...props }) {
 
   ];
   if(session){
-  const username = Object.entries(props.currentUser)[0][1];
-  console.log(Object.entries(props.currentUser).indexOf('display_name'))
-  const test = Object.entries(props.currentUser).map(user => user.display_name);
+  const username = Object.entries(props.currentUser)[1][1];
+  const test = Object.entries(props.currentUser).map(user => user.id);
   console.log('test output' + test)
     console.log(username);
     navigation.push({ name: 'profile', href: `/users/${username}/profile` });
