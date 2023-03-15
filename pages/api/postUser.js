@@ -3,7 +3,7 @@ import clientPromise from "../../lib/mongodb";
 export default async (req, res) => {
   const client = await clientPromise;
 
-  const db = client.db("nextjs-mongodb-demo");
+  const db = client.db(process.env.MONGODB_NAME);
   switch (req.method) {
     case "POST":
       //console.log(req.body);

@@ -73,7 +73,7 @@ export async function getServerSideProps({ req }) {
 }
 
 async function getData(UID, client) {
-  const db = client.db("nextjs-mongodb-demo");
+  const db = client.db(process.env.MONGODB_NAME);
   const options = {
     // Include only the `display_name` and `id` fields in the returned document
     projection: { _id: 0, display_name: 1, id: 1, images: 1},
@@ -115,7 +115,7 @@ async function getUserLikedSongs(UID, client, displayName, userImage) {
         }
     }
 ];
-  const coll = client.db("nextjs-mongodb-demo").collection("user-liked-tracks");
+  const coll = client.db(process.env.MONGODB_NAME).collection("user-liked-tracks");
   const cursor = coll.aggregate(pipeline);
   const result = await cursor.toArray();
   const likedTracks = {};

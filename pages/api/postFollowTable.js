@@ -7,7 +7,7 @@ export default async (req, res) => {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });
-  const db = client.db("nextjs-mongodb-demo");
+  const db = client.db(process.env.MONGODB_NAME);
   switch (req.method) {
     case "POST":
         try {

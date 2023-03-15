@@ -189,7 +189,7 @@ export async function getServerSideProps({ req }) {
 export default homePage;
 
 async function getUserProfile(UID, client) {
-  const db = client.db("nextjs-mongodb-demo");
+  const db = client.db(process.env.MONGODB_NAME);
   const options = {
     // Include only the `display_name` and `id` fields in the returned document
     projection: { _id: 0, display_name: 1, id: 1 },

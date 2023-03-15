@@ -156,7 +156,7 @@ export async function getServerSideProps({ req }) {
 
 export default Dashboard;
 async function getUserProfile(UID, client) {
-  const db = client.db("nextjs-mongodb-demo");
+  const db = client.db(process.env.MONGODB_NAME);
   const options = {
     // Include only the `display_name` and `id` fields in the returned document
     projection: { _id: 0, display_name: 1, id: 1 },
@@ -202,7 +202,7 @@ async function getFollowerTracks(UID) {
     },
   ];
   const coll = client
-    .db("nextjs-mongodb-demo")
+    .db(process.env.MONGODB_NAME)
     .collection("user-followed-users");
   const cursor = coll.aggregate(pipeline);
   const result = await cursor.toArray();
@@ -248,7 +248,7 @@ async function getFollowingTracks(UID) {
     },
   ];
   const coll = client
-    .db("nextjs-mongodb-demo")
+    .db(process.env.MONGODB_NAME)
     .collection("user-followed-users");
   const cursor = coll.aggregate(pipeline);
   const result = await cursor.toArray();

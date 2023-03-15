@@ -219,7 +219,7 @@ export default Profile;
 
 //get requests
 async function getMyProfile(UID, client) {
-  const db = client.db("nextjs-mongodb-demo");
+  const db = client.db(process.env.MONGODB_NAME);
   const options = {
     // Include only the `display_name` and `id` fields in the returned document
     projection: { _id: 0, display_name: 1, id: 1 },
@@ -253,7 +253,7 @@ async function getProfileOthers(UID, client) {
   ];
 
   // const client = await clientPromise;
-  const coll = client.db("nextjs-mongodb-demo").collection("users");
+  const coll = client.db(process.env.MONGODB_NAME).collection("users");
   const cursor = coll.aggregate(agg);
   const result = await cursor.toArray();
   return result;
@@ -261,7 +261,7 @@ async function getProfileOthers(UID, client) {
 
 // should have image, song name, artist, maybe album
 async function getUserLikedSongs(UID, client) {
-  const db = client.db("nextjs-mongodb-demo");
+  const db = client.db(process.env.MONGODB_NAME);
   const pipeline = [
     {
       $match: {
@@ -293,7 +293,7 @@ async function getUserLikedSongs(UID, client) {
     },
   ];
 
-  const coll = client.db("nextjs-mongodb-demo").collection("user-liked-tracks");
+  const coll = client.db(process.env.MONGODB_NAME).collection("user-liked-tracks");
   const cursor = coll.aggregate(pipeline);
   const result = await cursor.toArray();
 
@@ -370,7 +370,7 @@ export async function unfollowUser(userId, currentUser) {
 }
 
 async function getFollowData(UID, client) {
-  const db = client.db("nextjs-mongodb-demo");
+  const db = client.db(process.env.MONGODB_NAME);
   const pipeline = [
     {
       $match: {
@@ -388,7 +388,7 @@ async function getFollowData(UID, client) {
   ];
 
   const coll = client
-    .db("nextjs-mongodb-demo")
+    .db(process.env.MONGODB_NAME)
     .collection("user-followed-users");
   const cursor = coll.aggregate(pipeline);
   const result = await cursor.toArray();
@@ -398,7 +398,7 @@ async function getFollowData(UID, client) {
 
 async function getUsersByIds(userIds, client) {
   try {
-    const database = client.db("nextjs-mongodb-demo");
+    const database = client.db(process.env.MONGODB_NAME);
     const users = await database
       .collection("users")
       .find({ id: { $in: userIds } })
@@ -438,7 +438,7 @@ async function getFollowerUserProfiles(userId) {
     },
   ];
   const coll = client
-    .db("nextjs-mongodb-demo")
+    .db(process.env.MONGODB_NAME)
     .collection("user-followed-users");
   const cursor = coll.aggregate(pipeline);
   const result = await cursor.toArray();
@@ -472,7 +472,7 @@ async function getFollowingUserProfiles(userId) {
     }
   ];
   const coll = client
-    .db("nextjs-mongodb-demo")
+    .db(process.env.MONGODB_NAME)
     .collection("user-followed-users");
   const cursor = coll.aggregate(pipeline);
   const result = await cursor.toArray();

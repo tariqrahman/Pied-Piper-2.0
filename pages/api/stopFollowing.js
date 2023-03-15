@@ -3,7 +3,7 @@ import clientPromise from "@/lib/mongodb";
 //updates id1 starts following id2
 export default async (req, res) => {
   const client = await clientPromise;
-  const db = client.db("nextjs-mongodb-demo");
+  const db = client.db(process.env.MONGODB_NAME);
   switch (req.method) {
     case "POST":
       let [id1,id2] = [req.body];
