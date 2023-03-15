@@ -5,6 +5,7 @@ import Image from 'next/image';
 import spotify_logo from '../../public/spotify-icons-logos/logos/01_RGB/02_PNG/Spotify_Logo_RGB_Green.png';
 import Layout from '@/components/layout';
 import UserOnUsers from '@/components/userinfo-users';
+import Footer from '@/components/footer';
 
 
 function ActiveUsers({ providers }) {
@@ -45,9 +46,7 @@ function ActiveUsers({ providers }) {
               </div>
               </div>
           </Layout>
-          {/**header */}
-
-          {/*body*/}
+          <Footer />
         </div>
  );
 }
