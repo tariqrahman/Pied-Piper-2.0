@@ -31,6 +31,7 @@ function Profile({
 
   //set up variables for profile ----------
   console.log(profileContent);
+
   const userData = profileContent[0];
   const display_name = userData.display_name;
   const userLink = userData.href;

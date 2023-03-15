@@ -1,3 +1,7 @@
+/* @api/postArtist
+    - Post a user's top artists to database
+*/
+
 import clientPromise from "../../lib/mongodb";
 
 export default async (req, res) => {
