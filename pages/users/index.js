@@ -4,10 +4,13 @@ import { getProviders } from "next-auth/react";
 import Image from "next/image";
 import spotify_logo from "../../public/spotify-icons-logos/logos/01_RGB/02_PNG/Spotify_Logo_RGB_Green.png";
 import Layout from "@/components/layout";
+import { getSession } from "next-auth/react";
 import Footer from "@/components/footer";
 import UserOnUsers from "../../components/userinfo-users";
+import UserDisplay from "@/components/list-active-users";
+import clientPromise from "@/lib/mongodb";
 
-function UserList({ providers }) {
+function UserList({ providers, currentUser, allInfo }) {
   //userid should be used to get data related to user to display on page
   const router = useRouter();
   const userId = router.query.userId;
@@ -17,10 +20,9 @@ function UserList({ providers }) {
   const followUser = () => {
     console.log("followed user(#" + { userId } + ")");
   };
-
   return (
     <div className="min-h-screen dark:bg-[#000000] font-semibold">
-      <Layout providers={providers}>
+      <Layout providers={providers} currentUser={currentUser}>
         <div className="h-max bg-zinc-900 pb-5">
           <div className="flex mx-auto flex-col w-8/12 align-middle gap-3">
             {/* profile header */}
@@ -35,9 +37,13 @@ function UserList({ providers }) {
               </div>
             </div>
             {/** profile image, username/details, follow button*/}
-            <UserOnUsers></UserOnUsers>
-            <UserOnUsers></UserOnUsers>
-            <UserOnUsers></UserOnUsers>
+            {
+              allInfo.map((user, idx) => {
+                return (
+                  <UserDisplay followHandler={followUser} data={user} key={idx}/>
+                )
+              })
+            }
           </div>
         </div>
       </Layout>
@@ -49,41 +55,86 @@ function UserList({ providers }) {
   );
 }
 
-export async function getServerSideProps() {
+export async function getServerSideProps({ req }) {
   const providers = await getProviders();
-
+  const client = await clientPromise;
+  const session = await getSession({ req });
+  const userId = session.user.username;
+  //get requests
+  const allData = await populate(userId, client);
+  const [curUser, _] = await getData(userId, client);
   return {
     props: {
-      providers,
+      providers: providers,
+      currentUser: JSON.parse(JSON.stringify(curUser)),
+      allInfo: JSON.parse(JSON.stringify(allData)),
     },
   };
 }
 
+async function getData(UID, client) {
+  const db = client.db("nextjs-mongodb-demo");
+  const options = {
+    // Include only the `display_name` and `id` fields in the returned document
+    projection: { _id: 0, display_name: 1, id: 1, images: 1},
+  };
+  
+  const curUser = await db.collection("users").findOne({ id: UID }, options);
+  const allUsers = await db.collection("users").find({}, options).toArray();
+  return [curUser, allUsers];
+}
+
+// should have image, song name, artist, maybe album
+async function getUserLikedSongs(UID, client, displayName, userImage) {
+  const pipeline = [
+    {
+        '$match': {
+            'id': UID,
+        }
+    }, {
+        '$replaceRoot': {
+            'newRoot': '$likedTrackData'
+        }
+    }, {
+        '$project': {
+            'items': {
+                'track': {
+                    'name': 1, 
+                    'album': {
+                        'name': 1, 
+                        'href': 1, 
+                        'images': 1
+                    }, 
+                    'artists': {
+                        'href': 1, 
+                        'name': 1
+                    },
+                    'popularity': 1,
+                }
+            }
+        }
+    }
+];
+  const coll = client.db("nextjs-mongodb-demo").collection("user-liked-tracks");
+  const cursor = coll.aggregate(pipeline);
+  const result = await cursor.toArray();
+  const likedTracks = {};
+  likedTracks['display_name'] = displayName;
+  likedTracks['user_img_url'] = userImage;
+  likedTracks['userid'] = UID;
+  likedTracks['tracks'] = result[0].items;
+  return likedTracks;
+}
+
+async function populate(userId, client) {
+  const [_, allUsers] = await getData(userId, client);
+  const promises = allUsers.map(async user => {
+    const entry = await getUserLikedSongs(user['id'], client, user['display_name'], user['images'][0]['url']);
+    console.log(entry);
+    return entry;
+  })
+  const allData = await Promise.all(promises);
+  return allData;
+}
+
 export default UserList;
-
-//use 0 as no id inputted and do something else to handle this case
-//external websites links will use normal html anchor tag
-//use Link for internal links, else you would reset any client state you are currently maintaining
-// function userList({userId = 0}){
-//     return(
-//         <div className="container">
-//             <Link href='/'>
-//                 <div>
-//                 <a>homepage</a>
-//                 </div>
-//             </Link>
-//             <Link href={`/users/${userId}`}>
-//                 <div>
-//                 <a>user 1</a>
-//                 </div>
-//             </Link>
-//             <Link href={`/users/${userId}`}>
-//                 <div>
-//                     <a>user {userId}</a>
-//                 </div>
-//             </Link>
-//         </div>
-//     )
-// }
-
-// export default userList

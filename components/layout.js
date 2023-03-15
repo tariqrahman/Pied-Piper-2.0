@@ -1,22 +1,32 @@
-import Link from "next/link";
-import Image from "next/image";
-import logo from "../public/logo.png";
-import { useSession, signIn, signOut } from "next-auth/react";
-import handleAlert from "@/lib/helpers";
-import { useState } from "react";
-import { Dialog } from "@headlessui/react";
-import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 
-const navigation = [
-  { name: "about us", href: "/aboutus" },
-  { name: "users", href: "/users" },
-  { name: "dashboard", href: "/dashboard" },
-  { name: "profile", href: "/users/1234/profile" },
-];
+import Link from 'next/link';
+import Image from 'next/image';
+import logo from '../public/logo.png';
+import { useSession, getSession, signIn, signOut } from 'next-auth/react';
+import handleAlert from '@/lib/helpers';
+import { useState } from 'react';
+import { Dialog } from '@headlessui/react';
+import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 
+//has props provider, curUser
 export default function Layout({ ...props }) {
   const { data: session, status } = useSession();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const navigation = [
+    { name: 'about us', href: '/aboutus' },
+    { name: 'users', href: '/users' },
+    { name: 'dashboard', href: '/dashboard' },
+    { name: "profile", href: "/users/1234/profile" },
+  ];
+  if(session){
+  const username = Object.entries(props.currentUser)[1][1];
+  const test = Object.entries(props.currentUser).map(user => user.id);
+  console.log('test output' + test)
+    console.log(username);
+    navigation.push({ name: 'profile', href: `/users/${username}/profile` });
+  }else{
+    navigation.push({ name: 'profile', href: `/users/notlogged/profile` });
+  }
   return (
     <>
       {/** header */}
@@ -168,3 +178,30 @@ export default function Layout({ ...props }) {
     </>
   );
 }
+
+// export async function getServerSideProps({req}){
+//   try {
+//   const session = await getSession({req});
+//   const current_user = session.user.username;
+//   console.log(current_user);
+
+//     const client = await clientPromise;
+//     const db = client.db("nextjs-mongodb-demo");
+//     const userData = await db
+//       .collections("users")
+//       .find({})
+//       .toArray();
+//     res.json(userData);
+//     console.log(res);
+//   }catch(e) {
+//     console.error(e);
+//   }
+
+//   return {
+//     props: {
+      
+//       userData,
+//     }
+//   }
+// }
+

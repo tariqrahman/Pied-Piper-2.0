@@ -1,23 +1,24 @@
-import { useRouter } from 'next/router';
-import { useState } from 'react';
-import { getProviders } from 'next-auth/react';
-import Layout from '@/components/layout';
+import { useRouter } from "next/router";
+import { useState } from "react";
+import { getProviders } from "next-auth/react";
+import Layout from "@/components/layout";
+import { getSession } from "next-auth/react";
+import clientPromise from "@/lib/mongodb";
 import Footer from '@/components/footer';
 
-
-function Aboutus({ providers }) {
+function Aboutus({ providers, currentUser }) {
   //userid should be used to get data related to user to display on page
   const router = useRouter();
   const userId = router.query.userId;
 
   //add some call to add stuff to mongodb database
   const followUser = () => {
-    console.log('followed user(#' + { userId } + ')');
+    console.log("followed user(#" + { userId } + ")");
   };
 
   return (
     <div>
-      <Layout providers={providers}>
+      <Layout providers={providers} currentUser={currentUser}>
         {/* body */}
         <div className='min-h-screen py-12 bg-gradient-to-r
           from-blue-500
@@ -63,14 +64,40 @@ function Aboutus({ providers }) {
   );
 }
 
-export async function getServerSideProps() {
+export async function getServerSideProps({ req }) {
   const providers = await getProviders();
+  const session = await getSession({ req });
+  if (session) {
+    const client = await clientPromise;
+    const session = await getSession({ req });
+    const userId = session.user.username;
+    //get requests
+    const curUser = await getUserProfile(userId, client);
 
-  return {
-    props: {
-      providers,
-    },
+    return {
+      props: {
+        providers: providers,
+        currentUser: JSON.parse(JSON.stringify(curUser)),
+      },
+    };
+  }
+  if (!session) {
+    return {
+      props: {
+        providers: providers,
+      },
+    };
+  }
+}
+
+async function getUserProfile(UID, client) {
+  const db = client.db("nextjs-mongodb-demo");
+  const options = {
+    // Include only the `display_name` and `id` fields in the returned document
+    projection: { _id: 0, display_name: 1, id: 1 },
   };
+  const curUser = await db.collection("users").findOne({ id: UID }, options);
+  return curUser;
 }
 
 export default Aboutus;

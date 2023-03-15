@@ -5,20 +5,34 @@ import spotify_logo from "../../../public/spotify-icons-logos/logos/01_RGB/02_PN
 import Layout from "@/components/layout";
 import SongOnProfile from "@/components/song-onprofile";
 import UserOnProfile from "@/components/other-user-onprofile";
+import clientPromise from "@/lib/mongodb";
+import { getSession } from "next-auth/react";
 
-function Profile({ providers }) {
+
+function Profile({ providers, currentUser, userLikedTracks, profileContent}) {
+  console.log(currentUser);
+  console.log(profileContent);
   //userid should be used to get data related to user to display on page
   const router = useRouter();
   const userId = router.query.userId;
 
-  //add some call to add stuff to mongodb database
+  //button add some call to add stuff to mongodb database
   const followUser = () => {
     console.log("followed user(#" + { userId } + ")");
   };
 
+  //set up variables for profile
+  console.log(profileContent)
+  const userData = profileContent[0];
+  const display_name = userData.display_name;
+  const userLink = userData.href;
+  //hold image meta data 
+  const imageData = userData.images[0];
+  const imgSrc = imageData.url;
+
   return (
     <div>
-      <Layout providers={providers}>
+      <Layout providers={providers} currentUser={currentUser}>
         {/* body */}
         <div className="max-w-screen bg-black pb-5">
           <div className="flex mx-auto flex-col w-8/12 align-middle gap-3">
@@ -29,19 +43,19 @@ function Profile({ providers }) {
                 <div className="flex w-4/12 text-3xl pl-2 pt-2 pb-2">
                   <div className="w-auto h-auto">
                     <img
-                      className="flex shrink bg-cover lg:h-52 lg:w-52 md:h-36 md:w-36 rounded-full"
-                      src="https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80"
-                      alt="logo"
+                      className="flex shrink:0 bg-cover lg:h-52 lg:w-52 md:h-36 md:w-36 sm:h-36 sm:w-36 rounded-full"
+                      src={imgSrc}
+                      alt="user profile image"
                     ></img>
                   </div>
                 </div>
                 {/** right */}
                 <div className="flex shrink flex-col w-9/12">
-                  <div className="lg:text-6xl md:text-4xl pt-4 pb-2 break-words">
-                    ({userId})
+                  <div className="company-text lg:text-4xl md:text-4xl sm:text-3xl pt-4 pb-2 break-words">
+                    {display_name}
                   </div>
                   <button
-                    className="ml-1 mt-3 items-center border-solid border-2 w-32 h-8"
+                    className="ml-1 mt-3 items-center border-solid border-2 w-28 h-7 hover:border-cyan-400 hover:text-cyan-100"
                     onClick={followUser}
                   >
                     Follow
@@ -52,18 +66,21 @@ function Profile({ providers }) {
             {/** list of top 5 most listened tracks of the user */}
             <div>
               <div className="flex container flex-row text-zinc-300 px-2 pt-2 pb-5 text-2xl">
-                <div className="flex">Top Five Tracks</div>
+                <div className="flex">Liked Tracks</div>
               </div>
               {/* follwed users carousel/scroll */}
               <div className="flex flex-col gap-3 snap-x snap-proximity">
                 {/* list elements should be dynamically created later */}
                 {/* props to pass: album cover for song, song title, artist name */}
-                <div className="flex flex-row text-zinc-300 justify-between">
+                <div className="flex flex-row text-zinc-300 justify-left gap-3 px-2 snap-center scroll-smooth overflow-x-auto h-56">
+                  <SongOnProfile
+                    providers={providers}
+                    userLikedTracks={userLikedTracks}
+                  ></SongOnProfile>
+                  {/* <SongOnProfile providers={providers}></SongOnProfile>
                   <SongOnProfile providers={providers}></SongOnProfile>
                   <SongOnProfile providers={providers}></SongOnProfile>
-                  <SongOnProfile providers={providers}></SongOnProfile>
-                  <SongOnProfile providers={providers}></SongOnProfile>
-                  <SongOnProfile providers={providers}></SongOnProfile>
+                  <SongOnProfile providers={providers}></SongOnProfile> */}
                 </div>
               </div>
             </div>
@@ -112,14 +129,106 @@ function Profile({ providers }) {
   );
 }
 
-export async function getServerSideProps() {
+export async function getServerSideProps(context) {
+  const userId = context.params.userId;
+  console.log(userId)
   const providers = await getProviders();
-
+  const client = await clientPromise;
+  const req = context.req;
+  const session = await getSession( {req} );
+  const UID = session.user.username;
+  //get requests
+  const curUser = await getMyProfile(UID, client);
+  const curLikedTracks = await getUserLikedSongs(userId, client);
+  const userContent = await getProfileOthers(userId, client);
   return {
     props: {
-      providers,
+      providers: providers,
+      currentUser: JSON.parse(JSON.stringify(curUser)),
+      // userLikedTracks: JSON.parse(JSON.stringify(curLikedTracks)),
+      userLikedTracks: JSON.parse(JSON.stringify(curLikedTracks)),
+      profileContent: JSON.parse(JSON.stringify(userContent)),
     },
   };
 }
-
 export default Profile;
+
+//get requests
+async function getMyProfile(UID, client) {
+  const db = client.db("nextjs-mongodb-demo");
+  const options = {
+    // Include only the `display_name` and `id` fields in the returned document
+    projection: { _id: 0, display_name: 1, id: 1 },
+  };
+  const curUser = await db.collection("users").findOne({ id: UID }, options);
+  return curUser;
+}
+
+//for generating profile for other users
+async function getProfileOthers(UID,client ){
+  /*
+ * Requires the MongoDB Node.js Driver
+ * https://mongodb.github.io/node-mongodb-native
+ */
+
+const agg = [
+  {
+    '$match': {
+      'id': UID,
+    }
+  }, {
+    '$project': {
+      '_id': 0, 
+      'display_name': 1, 
+      'href': 1, 
+      'id': 1, 
+      'images': 1
+    }
+  }
+];
+
+// const client = await clientPromise;
+const coll = client.db('nextjs-mongodb-demo').collection('users');
+const cursor = coll.aggregate(agg);
+const result = await cursor.toArray();
+return result;
+}
+
+// should have image, song name, artist, maybe album
+async function getUserLikedSongs(UID, client) {
+  const db = client.db("nextjs-mongodb-demo");
+  const pipeline = [
+    {
+        '$match': {
+            'id': UID,
+        }
+    }, {
+        '$replaceRoot': {
+            'newRoot': '$likedTrackData'
+        }
+    }, {
+        '$project': {
+            'items': {
+                'track': {
+                    'name': 1, 
+                    'album': {
+                        'name': 1, 
+                        'href': 1, 
+                        'images': 1
+                    }, 
+                    'artists': {
+                        'href': 1, 
+                        'name': 1
+                    }
+                }
+            }
+        }
+    }
+];
+
+  const coll = client.db("nextjs-mongodb-demo").collection("user-liked-tracks");
+  const cursor = coll.aggregate(pipeline);
+  const result = await cursor.toArray();
+
+  return result;
+}

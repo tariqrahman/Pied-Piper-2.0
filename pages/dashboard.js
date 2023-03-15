@@ -1,20 +1,22 @@
 import { useState } from "react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { getProviders, signIn, signOut } from "next-auth/react";
-
+import { getSession } from "next-auth/react";
+import clientPromise from "@/lib/mongodb";
 import Layout from "@/components/layout";
 import UserSimilarArtist from "@/components/user-similar-artist";
 
-function Dashboard({ providers }) {
+function Dashboard({ providers, currentUser }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   return (
     <div className="">
-      <Layout providers={providers}>
+      <Layout providers={providers} currentUser={currentUser}>
         {/* body */}
         <div className="min-h-screen bg-zinc-900">
           <div className="flex mx-auto flex-col w-8/12 align-middle gap-3">
             {/* section 1 title*/}
             <div className="flex container flex-row text-zinc-300 justify-between px-2 pt-5 pb-3 text-lg">
+
               <div className="flex">Users with similar interest</div>
               <div className="flex text-blue-400 ">Show More</div>
             </div>
@@ -77,19 +79,33 @@ function Dashboard({ providers }) {
                     </div> */}
         </div>
       </Layout>
-      
     </div>
   );
 }
 
-export async function getServerSideProps() {
+export async function getServerSideProps({ req }) {
   const providers = await getProviders();
-
+  const client = await clientPromise;
+  const session = await getSession({ req });
+  const userId = session.user.username;
+  //get requests
+  const curUser = await getUserProfile(userId, client);
   return {
     props: {
-      providers,
+      providers: providers,
+      currentUser: JSON.parse(JSON.stringify(curUser)),
     },
   };
 }
 
 export default Dashboard;
+
+async function getUserProfile(UID, client) {
+  const db = client.db("nextjs-mongodb-demo");
+  const options = {
+    // Include only the `display_name` and `id` fields in the returned document
+    projection: { _id: 0, display_name: 1, id: 1 },
+  };
+  const curUser = await db.collection("users").findOne({ id: UID }, options);
+  return curUser;
+}
