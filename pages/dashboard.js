@@ -12,17 +12,18 @@ function Dashboard({ providers, currentUser }) {
     <div className="">
       <Layout providers={providers} currentUser={currentUser}>
         {/* body */}
-        <div className="min-h-screen dark:bg-[#000000]">
+        <div className="min-h-screen bg-zinc-900">
           <div className="flex mx-auto flex-col w-8/12 align-middle gap-3">
             {/* section 1 title*/}
-            <div className="flex container flex-row text-white justify-between px-2 pt-5 pb-3 text-lg">
+            <div className="flex container flex-row text-zinc-300 justify-between px-2 pt-5 pb-3 text-lg">
+
               <div className="flex">Users with similar interest</div>
               <div className="flex text-blue-400 ">Show More</div>
             </div>
             {/* section 1 elements */}
             <div className="flex flex-col gap-3">
               {/* list elements should be dynamically created later */}
-              <div className="flex flex-row flex-wrap text-white justify-between  gap-2.5 ">
+              <div className="flex flex-row flex-wrap text-zinc-300 gap-2.5 ">
                 <UserSimilarArtist providers={providers}></UserSimilarArtist>
               </div>
             </div>

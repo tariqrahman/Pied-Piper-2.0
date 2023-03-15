@@ -38,7 +38,7 @@ function Profile({ providers, currentUser, userLikedTracks, profileContent}) {
           <div className="flex mx-auto flex-col w-8/12 align-middle gap-3">
             {/** profile image, username/details, follow button*/}
             <div className="">
-              <div className="flex container flex-row text-white justify-left pt-9 text-md">
+              <div className="flex container flex-row text-zinc-300 justify-left pt-3 text-md">
                 {/** left */}
                 <div className="flex w-4/12 text-3xl pl-2 pt-2 pb-2">
                   <div className="w-auto h-auto">
@@ -65,14 +65,14 @@ function Profile({ providers, currentUser, userLikedTracks, profileContent}) {
             </div>
             {/** list of top 5 most listened tracks of the user */}
             <div>
-              <div className="flex container flex-row text-white px-2 pt-2 pb-2 text-xl">
-                <div className="flex company-text"><b>Liked Tracks</b></div>
+              <div className="flex container flex-row text-zinc-300 px-2 pt-2 pb-5 text-2xl">
+                <div className="flex">Liked Tracks</div>
               </div>
               {/* follwed users carousel/scroll */}
               <div className="flex flex-col gap-3 snap-x snap-proximity">
                 {/* list elements should be dynamically created later */}
                 {/* props to pass: album cover for song, song title, artist name */}
-                <div className="flex flex-row text-white justify-left gap-3 px-2 snap-center scroll-smooth overflow-x-auto h-56">
+                <div className="flex flex-row text-zinc-300 justify-left gap-3 px-2 snap-center scroll-smooth overflow-x-auto h-56">
                   <SongOnProfile
                     providers={providers}
                     userLikedTracks={userLikedTracks}
@@ -86,7 +86,7 @@ function Profile({ providers, currentUser, userLikedTracks, profileContent}) {
             </div>
             {/* followed list */}
             <div>
-              <div className="flex container flex-row text-white justify-between px-2 pt-2 pb-5 text-2xl">
+              <div className="flex container flex-row text-zinc-300 justify-between px-2 pt-2 pb-5 text-2xl">
                 <div className="flex">Following</div>
                 <div className="flex text-blue-400 ">Show More</div>
               </div>
@@ -94,7 +94,7 @@ function Profile({ providers, currentUser, userLikedTracks, profileContent}) {
               <div className="flex flex-col gap-3 snap-x snap-proximity">
                 {/* list elements should be dynamically created later */}
                 {/* props to pass: username, profile picture */}
-                <div className="flex flex-row text-white justify-left gap-10 px-2 snap-center scroll-smooth overflow-x-auto">
+                <div className="flex flex-row text-zinc-300 justify-left gap-10 px-2 snap-center scroll-smooth overflow-x-auto">
                   <UserOnProfile providers={providers} onClick></UserOnProfile>
                   <UserOnProfile providers={providers}></UserOnProfile>
                   <UserOnProfile providers={providers}></UserOnProfile>
@@ -106,13 +106,13 @@ function Profile({ providers, currentUser, userLikedTracks, profileContent}) {
             </div>
             {/* followers list */}
             <div>
-              <div className="flex container flex-row text-white justify-between px-2 pt-2 pb-5 text-2xl">
+              <div className="flex container flex-row text-zinc-300 justify-between px-2 pt-2 pb-5 text-2xl">
                 <div className="flex">Followers</div>
                 <div className="flex text-blue-400 ">Show More</div>
               </div>
               <div className="flex flex-col gap-3 snap-x snap-proximity">
                 {/* list elements should be dynamically created later */}
-                <div className="flex flex-row text-white justify-left gap-10 px-2 snap-center scroll-smooth overflow-x-auto">
+                <div className="flex flex-row text-zinc-300 justify-left gap-10 px-2 snap-center scroll-smooth overflow-x-auto">
                   <UserOnProfile providers={providers}></UserOnProfile>
                   <UserOnProfile providers={providers}></UserOnProfile>
                   <UserOnProfile providers={providers}></UserOnProfile>

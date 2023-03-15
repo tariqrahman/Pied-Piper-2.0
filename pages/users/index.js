@@ -5,6 +5,8 @@ import Image from "next/image";
 import spotify_logo from "../../public/spotify-icons-logos/logos/01_RGB/02_PNG/Spotify_Logo_RGB_Green.png";
 import Layout from "@/components/layout";
 import { getSession } from "next-auth/react";
+import Footer from "@/components/footer";
+import UserOnUsers from "../../components/userinfo-users";
 import UserDisplay from "@/components/list-active-users";
 import clientPromise from "@/lib/mongodb";
 
@@ -19,20 +21,22 @@ function UserList({ providers, currentUser, allInfo }) {
     console.log("followed user(#" + { userId } + ")");
   };
   return (
-    <div className="min-h-screen dark:bg-[#000000]">
+    <div className="min-h-screen dark:bg-[#000000] font-semibold">
       <Layout providers={providers} currentUser={currentUser}>
-        <div className="h-max bg-black pb-5">
+        <div className="h-max bg-zinc-900 pb-5">
           <div className="flex mx-auto flex-col w-8/12 align-middle gap-3">
             {/* profile header */}
-
-            <div className="flex container flex-row text-white justify-between px-2 pt-3 text-md">
-              {/** left */}
-              <div className="text-3xl">List of Active Users</div>
-              {/** right */}
-              <div className="flex h-auto w-32">
-                <Image className="" src={spotify_logo} alt="spotify logo" />
+            <div className="">
+              <div className="flex container flex-row text-zinc-300 justify-between px-2 pt-6 text-md">
+                {/** left */}
+                <div className="text-3xl">List of Active Users</div>
+                {/** right */}
+                <div className="flex h-auto w-32">
+                  <Image className="" src={spotify_logo} alt="spotify logo" />
+                </div>
               </div>
             </div>
+            {/** profile image, username/details, follow button*/}
             {
               allInfo.map((user, idx) => {
                 return (
@@ -43,6 +47,7 @@ function UserList({ providers, currentUser, allInfo }) {
           </div>
         </div>
       </Layout>
+      <Footer></Footer>
       {/** header */}
 
       {/* body */}
