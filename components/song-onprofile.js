@@ -23,7 +23,7 @@ export default function SongOnProfile({ ...props }) {
     //albumData
     var albumData = tracks[0].album;
     var albumName = albumData.name;
-    var albumLink = albumData.href;
+    var albumLink = "https://open.spotify.com/search/"+albumName;
     console.log(albumName);
     //image data
     var imageData = albumData.images[1];
@@ -33,20 +33,21 @@ export default function SongOnProfile({ ...props }) {
     console.log(imgSrc);
     //track name
     var trackName = tracks[0].name;
+    var trackLink = "https://open.spotify.com/search/"+trackName;
     console.log(trackName);
     //artist Data
     var artistData = tracks[0].artists[0];
     var artistName = artistData.name;
-    var artistLink = artistData.href;
+    var artistLink = "https://open.spotify.com/search/"+artistName;
     trackObj.push(
       <div className="flex flex-col w-32 align-middle hover:rounded-xl gap-1 min-w-min shrink-0 hover:bg-zinc-700 hover:scale-105 ">
-        <img className=" h-32 bg-cover" src={imgSrc} alt="albumcover"></img>
-        <div className="flex text-md company-text bold" href={albumLink}>
+        <a href={albumLink}><img className=" h-32 bg-cover" src={imgSrc} alt="albumcover"></img></a>
+        <a href={trackLink}><div className="flex text-md company-text bold">
           {trackName}
-        </div>
-        <div className="flex text-sm company-text text-zinc-400" href={artistLink}>
+        </div></a>
+        <a href={artistLink}><div className="flex text-sm company-text text-zinc-400">
           {artistName}
-        </div>
+        </div></a>
       </div>
     );
   }
