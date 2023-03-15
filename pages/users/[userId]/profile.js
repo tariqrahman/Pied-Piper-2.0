@@ -92,7 +92,7 @@ function Profile({
                 </div>
                 {/** right */}
                 <div className="flex shrink flex-col w-9/12">
-                  <div className="company-text lg:text-4xl md:text-4xl sm:text-3xl pt-4 pb-2 break-words">
+                  <div className="company-text lg:text-4xl md:text-4xl sm:text-3xl text-2xl pt-4 pb-2 break-words">
                     {display_name}
                   </div>
                   {followed ? (
@@ -129,48 +129,34 @@ function Profile({
                     providers={providers}
                     userLikedTracks={userLikedTracks}
                   ></SongOnProfile>
-                  {/* <SongOnProfile providers={providers}></SongOnProfile>
-                  <SongOnProfile providers={providers}></SongOnProfile>
-                  <SongOnProfile providers={providers}></SongOnProfile>
-                  <SongOnProfile providers={providers}></SongOnProfile> */}
                 </div>
               </div>
             </div>
             {/* followed list */}
             <div>
-              <div className="flex container flex-row text-white justify-between px-2 pt-2 pb-5 text-2xl">
-                <div className="flex">Following</div>
-                <div className="flex text-blue-400 ">Show More</div>
+              <div className="flex items-center container flex-row text-white justify-between company-text px-2 pt-2 pb-5 text-xl">
+                <div className="flex bolder">Following</div>
+                <div className="flex text-blue-400 text-sm">Show More</div>
               </div>
               {/* follwed users carousel/scroll */}
               <div className="flex flex-col gap-3 snap-x snap-proximity">
                 {/* list elements should be dynamically created later */}
                 {/* props to pass: username, profile picture */}
-                <div className="flex flex-row text-white justify-left gap-10 px-2 snap-center scroll-smooth overflow-x-auto">
-                  <UserOnProfile providers={providers} onClick></UserOnProfile>
-                  <UserOnProfile providers={providers}></UserOnProfile>
-                  <UserOnProfile providers={providers}></UserOnProfile>
-                  <UserOnProfile providers={providers}></UserOnProfile>
-                  <UserOnProfile providers={providers}></UserOnProfile>
-                  <UserOnProfile providers={providers}></UserOnProfile>
+                <div className="flex flex-row text-white justify-left gap-10 px-2 snap-center scroll-smooth overflow-x-auto h-42">
+                  <UserOnProfile providers={providers} userlist={listFollowings}></UserOnProfile>
                 </div>
               </div>
             </div>
             {/* followers list */}
             <div>
-              <div className="flex container flex-row text-white justify-between px-2 pt-2 pb-5 text-2xl">
-                <div className="flex">Followers</div>
-                <div className="flex text-blue-400 ">Show More</div>
+            <div className="flex items-center container flex-row text-white justify-between company-text px-2 pt-2 pb-5 text-xl">
+                <div className="flex bolder">Followers</div>
+                <div className="flex text-blue-400 text-sm">Show More</div>
               </div>
               <div className="flex flex-col gap-3 snap-x snap-proximity">
                 {/* list elements should be dynamically created later */}
-                <div className="flex flex-row text-white justify-left gap-10 px-2 snap-center scroll-smooth overflow-x-auto">
-                  <UserOnProfile providers={providers}></UserOnProfile>
-                  <UserOnProfile providers={providers}></UserOnProfile>
-                  <UserOnProfile providers={providers}></UserOnProfile>
-                  <UserOnProfile providers={providers}></UserOnProfile>
-                  <UserOnProfile providers={providers}></UserOnProfile>
-                  <UserOnProfile providers={providers}></UserOnProfile>
+                <div className="flex flex-row text-white justify-left gap-10 px-2 snap-center scroll-smooth overflow-x-auto h-42">
+                  <UserOnProfile providers={providers} userlist={listFollowers}></UserOnProfile>
                 </div>
               </div>
             </div>
@@ -398,7 +384,7 @@ async function getFollowerUserProfiles(userId) {
     },
     {
       $project: {
-        _id: 1,
+        _id: 0,
         follow_display: 1,
       },
     },
@@ -432,7 +418,7 @@ async function getFollowingUserProfiles(userId) {
       }
     }, {
       '$project': {
-        '_id': 1, 
+        '_id': 0, 
         'follow_display': 1
       }
     }
