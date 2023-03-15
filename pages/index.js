@@ -31,7 +31,7 @@ function homePage({ providers }) {
     console.log('followed user(#' + { userId } + ')');
   };
 
-  const scrollToBottom = () => {
+  const scroll = () => {
     window.scrollTo({
       top: document.documentElement.scrollHeight,
       behavior: 'smooth',
@@ -92,7 +92,7 @@ function homePage({ providers }) {
                   </p>
                   <div className='mt-10 flex items-center justify-center gap-x-6'>
                     <a
-                      onClick={scrollToBottom}
+                      href="#features"
                       className='border-white border-2 px-3.5 py-1.5 rounded-2xl text-base font-semibold leading-7 text-white'
                     >
                       learn more <span aria-hidden='true'>↓</span>
@@ -103,8 +103,8 @@ function homePage({ providers }) {
             </div>
           </div>
         </div>
-        <div className='sm:py-15'>
-          <div className='mx-auto max-w-7xl px-6 lg:px-8 py-32'>
+        <div id="features" className='sm:py-15'>
+          <div  className='mx-auto max-w-7xl px-6 lg:px-8 py-16'>
             <div className='mx-auto max-w-2xl lg:text-center'>
               <p className='mt-2 text-3xl font-bold tracking-tight text-black sm:text-4xl'>
                 features
