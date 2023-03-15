@@ -12,6 +12,8 @@ import {
   LockClosedIcon,
   ArrowDownIcon,
 } from '@heroicons/react/24/outline';
+import Lottie from 'react-lottie';
+import animationData from '../lotties/music.json';
 import Link from 'next/link';
 import Image from 'next/image';
 import spotify_logo from '../public/spotify-icons-logos/logos/01_RGB/02_PNG/Spotify_Logo_RGB_Green.png';
@@ -21,6 +23,14 @@ import logo from '../public/logo.png';
 import Layout from '@/components/layout';
 
 function homePage({ providers }) {
+  const defaultOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: animationData,
+    rendererSettings: {
+      preserveAspectRatio: 'xMidYMid slice',
+    },
+  };
   //userid should be used to get data related to user to display on page
   const router = useRouter();
   const userId = router.query.userId;
@@ -92,7 +102,7 @@ function homePage({ providers }) {
                   </p>
                   <div className='mt-10 flex items-center justify-center gap-x-6'>
                     <a
-                      href="#features"
+                      href='#features'
                       className='border-white border-2 px-3.5 py-1.5 rounded-2xl text-base font-semibold leading-7 text-white'
                     >
                       learn more <span aria-hidden='true'>↓</span>
@@ -103,13 +113,14 @@ function homePage({ providers }) {
             </div>
           </div>
         </div>
-        <div id="features" className='sm:py-15'>
-          <div  className='mx-auto max-w-7xl px-6 lg:px-8 py-16'>
+        <div id='features' className='sm:py-15'>
+          <div className='mx-auto max-w-7xl px-6 lg:px-8 py-16'>
             <div className='mx-auto max-w-2xl lg:text-center'>
-              <p className='mt-2 text-3xl font-bold tracking-tight text-black sm:text-4xl'>
+              <p className='mt-2 pb-4 text-3xl font-bold tracking-tight text-black sm:text-4xl'>
                 features
               </p>
-              <p className='mt-6 text-lg leading-8 text-white'>
+              <Lottie options={defaultOptions} height={40} width={150} />
+              <p className='mt-6 text-lg leading-8 text-black'>
                 learn about our web application and the implemented features
                 designed to make for a pleasant music discovery experience
               </p>
@@ -142,7 +153,6 @@ function homePage({ providers }) {
             </div>
           </div>
         </div>
-        
       </Layout>
       <Footer />
     </div>
