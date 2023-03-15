@@ -48,7 +48,7 @@ function processData(data) {
   result['display_name'] = data['display_name'];
   result['id'] = data['userid'];
   result['user_image'] = data['user_img_url'];
-  const sortedPopularity = data['tracks'].sort(function(a,b) {
+  const sortedPopularity = (data['tracks']==null ? []:data['tracks']).sort(function(a,b) {
     return b.track.popularity - a.track.popularity;
   });
   const top3 = sortedPopularity.slice(0, 3);
