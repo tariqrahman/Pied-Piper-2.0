@@ -2,7 +2,7 @@ import Link from "next/link";
 export default function UserDisplay({ ...props }) {
   const imgURL = props.data['user_img_url']
   return (
-    <div className="w-9/12 company-text"
+    <div className="w-9/12"
       style={{
         display: "flex",
         gap: "20px 50px",
@@ -18,7 +18,7 @@ export default function UserDisplay({ ...props }) {
 
 export function ProfileImage({...props}) {
   return (
-    <div className="shrink-0 flex">
+    <div className="mx-auto my-auto">
       <img
         className=" rounded-full "
         src={props.src}
