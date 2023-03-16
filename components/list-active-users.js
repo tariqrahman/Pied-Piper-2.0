@@ -5,7 +5,8 @@ export default function UserDisplay({ ...props }) {
       style={{
         display: "flex",
         gap: "20px 50px",
-        marginTop: "10px"
+        marginTop: "10px",
+        marginBottom: "25px"
       }}
     >
       <ProfileImage src={imgURL}/>
@@ -16,9 +17,9 @@ export default function UserDisplay({ ...props }) {
 
 export function ProfileImage({...props}) {
   return (
-    <div>
+    <div className="mx-auto my-auto">
       <img
-        style={{ width: "150px", height: "150px", borderRadius: "50%", marginTop: "30px" }}
+        className=" rounded-full "
         src={props.src}
         alt="logo"
       ></img>
@@ -109,10 +110,9 @@ export function UserData({...props}) {
       >
         {/* username & follow button */}
         <div className="flex flex-row justify-between items-center  ml-1">
-          <p style={{ color: "white", fontSize: 25 }}>{name}</p>
+          <p className="text-zinc-300" style={{fontSize: 25 }}>{name}</p>
           <button
-            style={{ color: "white" }}
-            className="border-solid border-2 w-28 h-7 border-cyan-500"
+            className="'border-zinc-300 text-zinc-300 border-2 px-3.5 py-1.5 rounded-xl text-base font-semibold leading-7 text-zinc-30"
             onClick={props.followUser}
           >
             Follow +
@@ -121,13 +121,13 @@ export function UserData({...props}) {
 
         {/* tracks for user */}
         <div className="ml-2 p-1 pb-2 divide-y divide-solid divide-zinc-700 ">
-          <div className="flex container flex-row text-white justify-between mb-1 text-md">
+          <div className="flex container flex-row text-zinc-300 justify-between mb-1 text-xl">
             <div className="flex">Most Listened Tracks</div>
             <div className="flex text-blue-400 "></div>
           </div>
           {/** dynamically pull top 3 songs from spotify based on user */}
           {/* list of top 3 most listened tracks */}
-          <div className=" flex flex-col text-white justify-left gap-2 px-2 divide-y divide-solid divide-zinc-900">
+          <div className=" flex flex-col text-zinc-300 justify-left gap-2 px-2 divide-y divide-solid divide-zinc-900 py-2">
             <DisplayTracks tracks={tracks}/>
           </div>
         </div>

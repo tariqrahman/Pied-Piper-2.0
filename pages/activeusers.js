@@ -23,10 +23,10 @@ function ActiveUsers({ providers }) {
     <div className="">
             <Layout providers={providers}>
                 {/* body */}
-                <div className='min-h-screen dark:bg-[#000000]'>
-                  <div className='h-max bg-black pb-5'>
+                <div className='min-h-screen bg-zinc-900'>
+                  <div className='h-max bg-zinc-900 pb-5'>
                   {/* profile header */}
-                  <div className='flex container flex-row text-white justify-between px-2 pt-3 text-md'>
+                  <div className='flex container flex-row text-zinc-300 justify-between px-2 pt-3 text-md'>
                   {/** left */}
                   <div className='text-3xl'>
                     List of Active Users

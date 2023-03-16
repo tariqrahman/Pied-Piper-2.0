@@ -15,10 +15,10 @@ const socials = [
 ];
 
 const navigation = [
-    { name: 'about us', href: '/aboutus' },
-    { name: 'users', href: '/users' },
-    { name: 'dashboard', href: '/dashboard' },
-    { name: 'profile', href: '/users/1234/profile' },
+    { name: 'About us', href: '/aboutus' },
+    { name: 'Users', href: '/users' },
+    { name: 'Dashboard', href: '/dashboard' },
+    { name: 'Profile', href: '/users/1234/profile' },
   ];
 
 const Footer = () => {

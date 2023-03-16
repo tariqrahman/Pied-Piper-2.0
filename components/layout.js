@@ -12,24 +12,24 @@ export default function Layout({ ...props }) {
   const { data: session, status } = useSession();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigation = [
-    { name: 'about us', href: '/aboutus' },
-    { name: 'users', href: '/users' },
-    { name: 'dashboard', href: '/dashboard' },
+    { name: 'About us', href: '/aboutus' },
+    { name: 'Users', href: '/users' },
+    { name: 'Dashboard', href: '/dashboard' },
   ];
   if (session && props.currentUser != null) {
     const username = Object.entries(props.currentUser)[1][1];
     const test = Object.entries(props.currentUser).map((user) => user.id);
     console.log('test output' + test);
     console.log(username);
-    navigation.push({ name: 'profile', href: `/users/${username}/profile` });
+    navigation.push({ name: 'Profile', href: `/users/${username}/profile` });
   } else {
-    navigation.push({ name: 'profile', href: `/users/notlogged/profile` });
+    navigation.push({ name: 'Profile', href: `/users/notlogged/profile` });
   }
   return (
     <>
       {/** header */}
 
-      <div className='isolate bg-zinc-900 text-zinc-300 border-b border-zinc-300'>
+      <div className='isolate bg-zinc-900 text-zinc-300 border-b border-zinc-300 font-semibold'>
         {/*navbar container*/}
         <div className=''>
           {/* navbar header */}
@@ -41,7 +41,7 @@ export default function Layout({ ...props }) {
               <Link href='/' className=' -m-1.5 p-1.5'>
                 <div className='flex flex-row items-center gap-2.5'>
                   <Image className='flex' src={logo} alt='company logo' />
-                  <div className='flex text-xl'>pied piper 2.0</div>
+                  <div className='flex text-xl'>Pied Piper 2.0</div>
                 </div>
               </Link>
             </div>
@@ -98,7 +98,7 @@ export default function Layout({ ...props }) {
                                 }}
                                 className='-mx-3 block rounded-lg py-2.5 px-3 text-base font-semibold leading-7 text-white hover:bg-gray-800'
                               >
-                                log out
+                                Log out
                               </button>
                             </>
                           )}
@@ -111,7 +111,7 @@ export default function Layout({ ...props }) {
                                 }}
                                 className='-mx-3 block rounded-lg py-2.5 px-3 text-base font-semibold leading-7 text-white hover:bg-gray-800'
                               >
-                                log in
+                                Log in
                               </button>
                             </>
                           )}
@@ -147,7 +147,7 @@ export default function Layout({ ...props }) {
                         }}
                       >
                         {' '}
-                        log out <span aria-hidden='true'>&rarr;</span>
+                        Log out <span aria-hidden='true'>&rarr;</span>
                       </button>
                     </>
                   )}
@@ -162,7 +162,7 @@ export default function Layout({ ...props }) {
                         }}
                       >
                         {' '}
-                        log in <span aria-hidden='true'>&rarr;</span>
+                        Log in <span aria-hidden='true'>&rarr;</span>
                       </button>
                     </>
                   )}

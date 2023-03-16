@@ -55,25 +55,25 @@ function homePage({ providers, currentUser }) {
     {
       name: 'NextAuth authentication',
       description:
-        'configured Spotify as a provider to authenticate users, retrieving user information, and managing user sessions. user session tokens are generated when a user logs in certain pages can only be accessed with a valid token.',
+        'Configured Spotify as a provider to authenticate users, retrieving user information, and managing user sessions. user session tokens are generated when a user logs in certain pages can only be accessed with a valid token.',
       icon: LockClosedIcon,
     },
     {
       name: 'in-depth analysis',
       description:
-        "by utilzing the Spotify API, data is drawn directly from a user's account. this ensures that a user's reccomendations of other users with similar taste are accurate and up-to-date!",
+        "By utilzing the Spotify API, data is drawn directly from a user's account. this ensures that a user's reccomendations of other users with similar taste are accurate and up-to-date!",
       icon: ChatBubbleBottomCenterIcon,
     },
     {
       name: 'database',
       description:
-        'once a user logs into our application, their profile data and listening habits are posted to our database. using MongoDB, we are able to match existing users based on their listening habits.',
+        'Once a user logs into our application, their profile data and listening habits are posted to our database. using MongoDB, we are able to match existing users based on their listening habits.',
       icon: HashtagIcon,
     },
     {
       name: 'community',
       description:
-        "connect with other Bruins with similar and different music taste than you! you can explore all users via the 'user' tab and similar users via the dashboard.",
+        "Connect with other Bruins with similar and different music taste than you! you can explore all users via the 'user' tab and similar users via the dashboard.",
       icon: HeartIcon,
     },
   ];
@@ -82,7 +82,7 @@ function homePage({ providers, currentUser }) {
     <div>
       <Layout providers={providers} currentUser={currentUser}>
         {/* body */}
-        {/* <div className="min-h-screen bg-black pb-5"> */}
+        {/* <div className="min-h-screen bg-zinc-900 pb-5"> */}
         <div
           className='min-h-screen pb-5 bg-gradient-to-r
           from-blue-500
@@ -98,15 +98,15 @@ function homePage({ providers, currentUser }) {
                   <h1 className='text-4xl font-bold tracking-tight text-zinc-300 sm:text-6xl'>
                     pied piper 2.0
                   </h1>
-                  <p className='mt-6 text-lg leading-8 text-white'>
-                    a social networking platform based on your music taste
+                  <p className='mt-6 text-lg leading-8 text-zinc-300'>
+                    A social networking platform based on your music taste
                   </p>
                   <div className='mt-10 flex items-center justify-center gap-x-6'>
                     <a
                       href='#features'
-                      className='border-white border-2 px-3.5 py-1.5 rounded-2xl text-base font-semibold leading-7 text-white'
+                      className='border-zinc-300 border-2 px-3.5 py-1.5 rounded-2xl text-base font-semibold leading-7 text-zinc-300'
                     >
-                      learn more <span aria-hidden='true'>↓</span>
+                      Learn more <span aria-hidden='true'>↓</span>
                     </a>
                   </div>
                 </div>
@@ -117,12 +117,12 @@ function homePage({ providers, currentUser }) {
         <div id='features' className='sm:py-15'>
           <div className='mx-auto max-w-7xl px-6 lg:px-8 py-16'>
             <div className='mx-auto max-w-2xl lg:text-center'>
-              <p className='mt-2 pb-4 text-3xl font-bold tracking-tight text-black sm:text-4xl'>
+              <p className='mt-2 pb-4 text-3xl font-bold tracking-tight text-zinc-900 sm:text-4xl'>
                 features
               </p>
               <Lottie options={defaultOptions} height={40} width={150} />
-              <p className='mt-6 text-lg leading-8 text-black'>
-                learn about our web application and the implemented features
+              <p className='mt-6 text-lg leading-8 text-zinc-900'>
+                Learn about our web application and the implemented features
                 designed to make for a pleasant music discovery experience
               </p>
             </div>
@@ -130,7 +130,7 @@ function homePage({ providers, currentUser }) {
               <dl className='grid max-w-xl grid-cols-1 gap-y-10 gap-x-8 lg:max-w-none lg:grid-cols-2 lg:gap-y-16'>
                 {features.map((feature) => (
                   <div key={feature.name} className='relative pl-16'>
-                    <dt className='text-base font-semibold leading-7 text-black'>
+                    <dt className='text-base font-semibold leading-7 text-zinc-900'>
                       <div
                         className='absolute top-0 left-0 flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-r
           from-blue-500
@@ -145,7 +145,7 @@ function homePage({ providers, currentUser }) {
                       </div>
                       {feature.name}
                     </dt>
-                    <dd className='mt-2 text-base leading-7 text-black'>
+                    <dd className='mt-2 text-base leading-7 text-zinc-900'>
                       {feature.description}
                     </dd>
                   </div>

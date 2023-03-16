@@ -21,15 +21,15 @@ function UserList({ providers, currentUser, allInfo }) {
     console.log("followed user(#" + { userId } + ")");
   };
   return (
-    <div className="min-h-screen dark:bg-[#000000] font-semibold">
+    <div className="min-h-screen bg-zinc-900">
       <Layout providers={providers} currentUser={currentUser}>
-        <div className="h-max bg-zinc-900 pb-5">
+        <div className="min-h-screen h-max bg-zinc-900 pb-5">
           <div className="flex mx-auto flex-col w-8/12 align-middle gap-3">
             {/* profile header */}
             <div className="">
               <div className="flex container flex-row text-zinc-300 justify-between px-2 pt-6 text-md">
                 {/** left */}
-                <div className="text-3xl">List of Active Users</div>
+                <div className="text-3xl font-semibold">List of Active Users</div>
                 {/** right */}
                 <div className="flex h-auto w-32">
                   <Image className="" src={spotify_logo} alt="spotify logo" />

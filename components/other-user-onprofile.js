@@ -24,7 +24,7 @@ export default function UserOnProfile({ ...props }) {
           src={imgSrc}
           alt="user profile image"
         ></img>
-        <div className="text-center text-md company-text text-white">{display_name}</div>
+        <div className="text-center text-md text-semi-bold text-zinc-300">{display_name}</div>
         </div>
       </Link>
     )
@@ -34,11 +34,11 @@ export default function UserOnProfile({ ...props }) {
     <Link href='/users' prefetch={false}>
         <div className="flex flex-col w-32 align-middle hover:rounded-xl gap-1 min-w-min shrink-0 hover:bg-zinc-700 hover:scale-105">
         <img
-          className="h-32 bg-sky-500 bg-cover rounded-full"
+          className="h-32 bg-zinc-600 bg-cover rounded-full"
           src=""
           alt=""
         ></img>
-        <div className="text-center text-md company-text text-white">Find Others</div>
+        <div className="text-center text-md text-semi-bold text-zinc-300">Find Others</div>
         </div>
       </Link>
   )

@@ -11,6 +11,7 @@ import { getSession } from "next-auth/react";
 import { list } from "postcss";
 import { useState } from "react";
 
+// Pass in data fetched from database as props
 function Profile({
   providers,
   currentUser,
@@ -23,35 +24,30 @@ function Profile({
   console.log(currentUser);
   console.log(profileContent);
   console.log(followData);
-  //userid should be used to get data related to user to display on page
+  // Userid should be used to get data related to user to display on page
   const router = useRouter();
   const userId = router.query.userId;
-  //console.log(curUserId);
-  //adds user to curUsers follow list
-  //adds curUser to other users follower list
-
-  //set up variables for profile ----------
   console.log(profileContent);
 
   const userData = profileContent[0];
   const display_name = userData.display_name;
   const userLink = userData.href;
-  //hold image meta data ------------------
+  // Hold meta data for users profile picture
   const imageData = userData.images[0];
   const imgSrc = imageData.url;
-  //organize follower data ----------------
+  // Organize follower data
   console.log(followData);
   const followArr = Object.entries(followData);
   const followDataMap = followArr[0][1];
   console.log(followDataMap.id);
-  //cur is session user
+  // Cur is session user
   const curFollowers = followDataMap.follower;
   const curFollowings = followDataMap.following;
   var followed = false;
   var ownProfile = false;
-  //check if current profile is followed by session user
+  // Check if current profile is followed by session user
   if (followDataMap.id == userId) {
-    ownProfile = true; //override when looking at own profile
+    ownProfile = true; // Override when looking at own profile
   } else {
     for (var i = 0; i < curFollowings.length; i++) {
       console.log("in loop for following");
@@ -63,6 +59,8 @@ function Profile({
     }
   }
   
+  // Follow and unfollow user
+  // If not currently following then follow on click, if already following then unfollow on click
   const [followStatus, setFollowStatus] = useState(followed ? "Follow":"Unfollow");
   const handleClick = () => {
     if(followStatus == "Follow"){
@@ -78,7 +76,7 @@ function Profile({
     <div>
       <Layout providers={providers} currentUser={currentUser}>
         {/* body */}
-        <div className="max-w-screen bg-black pb-5">
+        <div className="max-w-screen bg-zinc-900 pb-5 text-semi-bold">
           <div className="flex mx-auto flex-col w-8/12 align-middle gap-3">
             {/** profile image, username/details, follow button*/}
             <div className="">
@@ -95,7 +93,7 @@ function Profile({
                 </div>
                 {/** right */}
                 <div className="flex shrink flex-col w-9/12 pt-4">
-                  <div className="company-text ">
+                  <div className="">
                     {display_name}
                   </div>
                   
@@ -117,11 +115,11 @@ function Profile({
                 </div>
               </div>
             </div>
-            {/** list of top 5 most listened tracks of the user */}
+            {/** list most listened to tracks of the user */}
             <div>
 
-              <div className="flex justify-between items-center container flex-row text-white px-2 pt-2 pb-2 text-xl">
-                <div className="flex company-text">
+              <div className="flex justify-between items-center container flex-row text-zinc-300 px-2 pt-2 pb-2 text-xl">
+                <div className="flex">
                   <b>Liked Tracks</b>
                 </div>
                 <div className="flex h-auto w-28 mb-1">
@@ -144,7 +142,7 @@ function Profile({
             {/* followed list */}
             <div>
 
-              <div className="flex items-center container flex-row text-white justify-between company-text px-2 pt-2 pb-5 text-xl">
+              <div className="flex items-center container flex-row text-zinc-300 justify-between px-2 pt-2 pb-5 text-xl">
                 <div className="flex bolder">Following</div>
                 <div className="flex text-blue-400 text-sm">Show More</div>
 
@@ -154,7 +152,7 @@ function Profile({
                 {/* list elements should be dynamically created later */}
                 {/* props to pass: username, profile picture */}
 
-                <div className="flex flex-row text-white justify-left gap-10 px-2 snap-center scroll-smooth overflow-x-auto h-42">
+                <div className="flex flex-row text-zinc-300 justify-left gap-10 px-2 snap-center scroll-smooth overflow-x-auto h-42">
                   <UserOnProfile providers={providers} userlist={listFollowings}></UserOnProfile>
 
                 </div>
@@ -163,13 +161,13 @@ function Profile({
             {/* followers list */}
             <div>
 
-            <div className="flex items-center container flex-row text-white justify-between company-text px-2 pt-2 pb-5 text-xl">
+            <div className="flex items-center container flex-row text-zinc-300 justify-between px-2 pt-2 pb-5 text-xl">
                 <div className="flex bolder">Followers</div>
                 <div className="flex text-blue-400 text-sm">Show More</div>
               </div>
               <div className="flex flex-col gap-3 snap-x snap-proximity">
                 {/* list elements should be dynamically created later */}
-                <div className="flex flex-row text-white justify-left gap-10 px-2 snap-center scroll-smooth overflow-x-auto h-42">
+                <div className="flex flex-row text-zinc-300 justify-left gap-10 px-2 snap-center scroll-smooth overflow-x-auto h-42">
                   <UserOnProfile providers={providers} userlist={listFollowers}></UserOnProfile>
 
                 </div>
