@@ -122,8 +122,10 @@ function Profile({
                 <div className="flex">
                   <b>Liked Tracks</b>
                 </div>
-                <div className="flex h-auto w-28 mb-1">
+                <div className="flex h-auto w-28 mb-1 hover:scale-105">
+                  <a href="https://open.spotify.com/" target="_blank">
                   <Image className="" src={spotify_logo} alt="spotify logo" />
+                  </a>
                 </div>
 
               </div>

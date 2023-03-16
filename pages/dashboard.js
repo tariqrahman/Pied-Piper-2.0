@@ -24,16 +24,16 @@ function Dashboard({
         {/* body */}
         <div className="min-h-screen bg-zinc-900 font-semibold">
           <div className="flex mx-auto flex-col w-8/12 align-middle gap-3 divide-y divide-solid divide-zinc-300">
-            <div className="flex flex-row justify-between text-3xl pt-2 pl-2 pr-2 items-center">
-                <div className="text-zinc-300  ">
-                    DASHBOARD
-                </div>
-                <div className="flex h-auto w-32">
+            <div className="flex flex-row justify-between text-3xl pt-5 pb-2.5 pl-2 pr-2 items-center">
+              <div className="text-zinc-300  ">DASHBOARD</div>
+              <div className="flex h-auto w-32 hover:scale-105">
+                <a href="https://open.spotify.com/" target="_blank">
                   <Image className="" src={spotify_logo} alt="spotify logo" />
-                </div>
+                </a>
+              </div>
             </div>
             <div>
-              <div className="flex items-center container flex-row text-zinc-300 justify-between px-2 pt-2 pb-5 text-xl">
+              <div className="flex items-center container flex-row text-zinc-300 justify-between px-2 pt-3 pb-5 text-xl">
                 <div className="flex bolder">Tracks From Followed Users</div>
                 <div className="flex text-blue-400 text-sm">Show More</div>
               </div>
@@ -50,7 +50,7 @@ function Dashboard({
             </div>
             {/* followers list */}
             <div>
-              <div className="flex items-center container flex-row text-zinc-300 justify-between px-2 pt-2 pb-5 text-xl mb-52">
+              <div className="flex items-center container flex-row text-zinc-300 justify-between px-2 pt-3 pb-5 text-xl mb-52">
                 <div className="flex bolder">Tracks From Your Followers</div>
                 <div className="flex text-blue-400 text-sm">Show More</div>
               </div>
