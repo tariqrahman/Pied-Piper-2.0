@@ -1,7 +1,8 @@
+import Link from "next/link";
 export default function UserDisplay({ ...props }) {
   const imgURL = props.data['user_img_url']
   return (
-    <div
+    <div className="w-9/12 company-text"
       style={{
         display: "flex",
         gap: "20px 50px",
@@ -17,7 +18,7 @@ export default function UserDisplay({ ...props }) {
 
 export function ProfileImage({...props}) {
   return (
-    <div className="mx-auto my-auto">
+    <div className="shrink-0 flex">
       <img
         className=" rounded-full "
         src={props.src}
@@ -82,7 +83,7 @@ function DisplayTracks({...props}) {
               ></img>
               <div className="flex container flex-row justify-between">
                 <div className="">{song_name}</div>
-                <div className="">{artist} | {album}</div>
+                <div className="text-zinc-400">{artist} | {album}</div>
               </div>
             </div>
         )
@@ -93,6 +94,9 @@ function DisplayTracks({...props}) {
 
 export function UserData({...props}) {
   const displayedData = processData(props.data);
+  console.log("userid here");
+  console.log(displayedData['id']);
+  const id = displayedData['id'];
   const name = displayedData["display_name"];
   const tracks = displayedData["top_tracks"];
   return (
@@ -110,13 +114,15 @@ export function UserData({...props}) {
       >
         {/* username & follow button */}
         <div className="flex flex-row justify-between items-center  ml-1">
-          <p className="text-zinc-300" style={{fontSize: 25 }}>{name}</p>
+          <p style={{ color: "white", fontSize: 25 }}>{name}</p>
+          <Link href={'http://localhost:3000/users/'+id+'/profile'}>
           <button
-            className="'border-zinc-300 text-zinc-300 border-2 px-3.5 py-1.5 rounded-xl text-base font-semibold leading-7 text-zinc-30"
+            className="border-zinc-300 text-zinc-300 border-2 px-3.5 py-1.5 rounded-xl text-base font-semibold leading-7 text-zinc-30"
             onClick={props.followUser}
-          >
-            Follow +
+            >
+            Profile 
           </button>
+            </Link>
         </div>
 
         {/* tracks for user */}

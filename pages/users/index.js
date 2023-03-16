@@ -138,3 +138,44 @@ async function populate(userId, client) {
 }
 
 export default UserList;
+
+// follow button stuff
+async function getFollowData(UID, client) {
+  const db = client.db(process.env.MONGODB_NAME);
+  const pipeline = [
+    {
+      $match: {
+        id: UID,
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        id: 1,
+        follower: 1,
+        following: 1,
+      },
+    },
+  ];
+
+  const coll = client
+    .db(process.env.MONGODB_NAME)
+    .collection("user-followed-users");
+  const cursor = coll.aggregate(pipeline);
+  const result = await cursor.toArray();
+
+  return result;
+}
+//given a list of ids get all ids in list
+async function getUsersByIds(userIds, client) {
+  try {
+    const database = client.db(process.env.MONGODB_NAME);
+    const users = await database
+      .collection("users")
+      .find({ id: { $in: userIds } })
+      .toArray();
+    return users;
+  } catch (error) {
+    console.error(error);
+  }
+}
