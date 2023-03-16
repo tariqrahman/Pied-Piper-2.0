@@ -21,29 +21,31 @@ function UserList({ providers, currentUser, allInfo }) {
     console.log("followed user(#" + { userId } + ")");
   };
   return (
-    <div className="min-h-screen dark:bg-[#000000] font-semibold">
+    <div className="min-h-screen bg-zinc-900">
       <Layout providers={providers} currentUser={currentUser}>
-        <div className="h-max bg-zinc-900 pb-5">
-          <div className="flex mx-auto flex-col w-9/12 align-middle gap-3">
+        <div className="min-h-screen h-max bg-zinc-900 pb-5">
+          <div className="flex mx-auto flex-col w-8/12 align-middle gap-3">
             {/* profile header */}
             <div className="">
               <div className="flex container flex-row text-zinc-300 justify-between px-2 pt-6 text-md">
                 {/** left */}
-                <div className="text-3xl">List of Active Users</div>
+                <div className="text-3xl font-semibold">
+                  List of Active Users
+                </div>
                 {/** right */}
-                <div className="flex h-auto w-32">
-                  <Image className="" src={spotify_logo} alt="spotify logo" />
+                <div className="flex h-auto w-32 hover:scale-105">
+                  <a href="https://open.spotify.com/" target="_blank">
+                    <Image className="" src={spotify_logo} alt="spotify logo" />
+                  </a>
                 </div>
               </div>
             </div>
             {/** profile image, username/details, follow button*/}
-            {
-              allInfo.map((user, idx) => {
-                return (
-                  <UserDisplay followHandler={followUser} data={user} key={idx}/>
-                )
-              })
-            }
+            {allInfo.map((user, idx) => {
+              return (
+                <UserDisplay followHandler={followUser} data={user} key={idx} />
+              );
+            })}
           </div>
         </div>
       </Layout>
@@ -76,9 +78,9 @@ async function getData(UID, client) {
   const db = client.db(process.env.MONGODB_NAME);
   const options = {
     // Include only the `display_name` and `id` fields in the returned document
-    projection: { _id: 0, display_name: 1, id: 1, images: 1},
+    projection: { _id: 0, display_name: 1, id: 1, images: 1 },
   };
-  
+
   const curUser = await db.collection("users").findOne({ id: UID }, options);
   const allUsers = await db.collection("users").find({}, options).toArray();
   return [curUser, allUsers];
@@ -88,51 +90,60 @@ async function getData(UID, client) {
 async function getUserLikedSongs(UID, client, displayName, userImage) {
   const pipeline = [
     {
-        '$match': {
-            'id': UID,
-        }
-    }, {
-        '$replaceRoot': {
-            'newRoot': '$likedTrackData'
-        }
-    }, {
-        '$project': {
-            'items': {
-                'track': {
-                    'name': 1, 
-                    'album': {
-                        'name': 1, 
-                        'href': 1, 
-                        'images': 1
-                    }, 
-                    'artists': {
-                        'href': 1, 
-                        'name': 1
-                    },
-                    'popularity': 1,
-                }
-            }
-        }
-    }
-];
-  const coll = client.db(process.env.MONGODB_NAME).collection("user-liked-tracks");
+      $match: {
+        id: UID,
+      },
+    },
+    {
+      $replaceRoot: {
+        newRoot: "$likedTrackData",
+      },
+    },
+    {
+      $project: {
+        items: {
+          track: {
+            name: 1,
+            album: {
+              name: 1,
+              href: 1,
+              images: 1,
+            },
+            artists: {
+              href: 1,
+              name: 1,
+            },
+            popularity: 1,
+          },
+        },
+      },
+    },
+  ];
+  const coll = client
+    .db(process.env.MONGODB_NAME)
+    .collection("user-liked-tracks");
   const cursor = coll.aggregate(pipeline);
   const result = await cursor.toArray();
   const likedTracks = {};
-  likedTracks['display_name'] = displayName;
-  likedTracks['user_img_url'] = userImage;
-  likedTracks['userid'] = UID;
-  likedTracks['tracks'] = result[0].items;
+  likedTracks["display_name"] = displayName;
+  likedTracks["user_img_url"] = userImage;
+  likedTracks["userid"] = UID;
+  likedTracks["tracks"] = result[0].items;
   return likedTracks;
 }
 
 async function populate(userId, client) {
   const [_, allUsers] = await getData(userId, client);
-  const promises = allUsers.map(async user => {
-    const entry = await getUserLikedSongs(user['id'], client, user['display_name'], user['images'][0]['url']);
+  const promises = allUsers.map(async (user) => {
+    const entry = await getUserLikedSongs(
+      user["id"],
+      client,
+      user["display_name"],
+      user["images"][0]["url"]
+    );
     console.log(entry);
     return entry;
-  })
+  });
   const allData = await Promise.all(promises);
   return allData;
 }

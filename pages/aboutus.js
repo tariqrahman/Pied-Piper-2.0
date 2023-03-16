@@ -32,7 +32,7 @@ function Aboutus({ providers, currentUser }) {
                   About Us
                 </h1>
                 <p className='mt-6 mb-6 text-lg text-center leading-8 text-zinc-300'>
-                  Audiolink is here to provide a platform to connect with others
+                  Pied Piper 2.0 is here to provide a platform to connect with others
                   based on their music preferences.
                 </p>
                 <h1 className='font-bold tracking-tight text-zinc-900 sm:text-3xl'>
