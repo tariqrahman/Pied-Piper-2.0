@@ -49,7 +49,7 @@ function Profile({
   if (followDataMap.id == userId) {
     ownProfile = true; // Override when looking at own profile
   } else {
-    for (var i = 0; i < curFollowings.length; i++) {
+    for (var i = 0; i < curFollowers.length; i++) {
       console.log("in loop for following");
       if (curFollowings[i] == userId) {
         console.log("already followed this person");
@@ -61,7 +61,7 @@ function Profile({
   
   // Follow and unfollow user
   // If not currently following then follow on click, if already following then unfollow on click
-  const [followStatus, setFollowStatus] = useState(followed ? "Follow":"Unfollow");
+  const [followStatus, setFollowStatus] = useState(followed ? "Unfollow":"Follow");
   const handleClick = () => {
     if(followStatus == "Follow"){
       followed = !followed;
@@ -99,14 +99,14 @@ function Profile({
                   
                   {ownProfile ? (<></>): followed ? (
                     <button
-                      className="ml-1 mt-3 items-center border-solid border-2 w-28 h-7 border-sky-300 text-sky-300 hover:border-cyan-400 hover:text-cyan-100 hover:bg-sky-700"
+                      className="text-sm ml-1 mt-3 items-center border-solid border-2 w-28 h-7 border-sky-300 text-sky-300 hover:border-cyan-400 hover:text-cyan-100 hover:bg-sky-700"
                       onClick={() => {unfollowUser(userId, currentUser); handleClick()}}
                     >
                       {followStatus}
                     </button>
                   ) : (
                     <button
-                      className="ml-1 mt-3 items-center border-solid border-2 w-28 h-7 hover:border-cyan-400 hover:text-cyan-100"
+                      className="text-sm ml-1 mt-3 items-center border-solid border-2 w-28 h-7 hover:border-cyan-400 hover:text-cyan-100"
                       onClick={() => {followUser(userId, currentUser); handleClick()}}
                     >
                       {followStatus}
