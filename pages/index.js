@@ -55,19 +55,19 @@ function homePage({ providers, currentUser }) {
     {
       name: 'NextAuth authentication',
       description:
-        'Configured Spotify as a provider to authenticate users, retrieving user information, and managing user sessions. user session tokens are generated when a user logs in certain pages can only be accessed with a valid token.',
+        'Configured Spotify as a provider to authenticate users, retrieving user information, and managing user sessions. User session tokens are generated when a user logs in certain pages can only be accessed with a valid token.',
       icon: LockClosedIcon,
     },
     {
       name: 'in-depth analysis',
       description:
-        "By utilzing the Spotify API, data is drawn directly from a user's account. this ensures that a user's reccomendations of other users with similar taste are accurate and up-to-date!",
+        "By utilzing the Spotify API, data is drawn directly from a user's account. This ensures that a user's reccomendations of other users with similar taste are accurate and up-to-date!",
       icon: ChatBubbleBottomCenterIcon,
     },
     {
       name: 'database',
       description:
-        'Once a user logs into our application, their profile data and listening habits are posted to our database. using MongoDB, we are able to match existing users based on their listening habits.',
+        'Once a user logs into our application, their profile data and listening habits are posted to our database. Using MongoDB, we are able to match existing users based on their listening habits.',
       icon: HashtagIcon,
     },
     {
