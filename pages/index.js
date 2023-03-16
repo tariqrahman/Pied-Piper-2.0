@@ -1,29 +1,21 @@
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import Footer from '@/components/footer';
-import { Dialog } from '@headlessui/react';
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { getProviders, signIn, signOut } from 'next-auth/react';
 import {
-  ArrowPathIcon,
   HeartIcon,
   ChatBubbleBottomCenterIcon,
   HashtagIcon,
   LockClosedIcon,
-  ArrowDownIcon,
 } from '@heroicons/react/24/outline';
 import Lottie from 'react-lottie';
 import animationData from '../lotties/music.json';
-import Link from 'next/link';
-import Image from 'next/image';
-import spotify_logo from '../public/spotify-icons-logos/logos/01_RGB/02_PNG/Spotify_Logo_RGB_Green.png';
-import logo from '../public/logo.png';
-//import LinearGradient from 'react-native-linear-gradient';
 import Layout from '@/components/layout';
 import { getSession } from "next-auth/react";
 import clientPromise from "@/lib/mongodb";
 
-function homePage({ providers, currentUser }) {
+function homePage({ providers, currentUser, userResults }) {
+  console.log(userResults);
   const defaultOptions = {
     loop: true,
     autoplay: true,
@@ -80,7 +72,7 @@ function homePage({ providers, currentUser }) {
 
   return (
     <div>
-      <Layout providers={providers} currentUser={currentUser}>
+      <Layout providers={providers} currentUser={currentUser} userResults={userResults}>
         {/* body */}
         {/* <div className="min-h-screen bg-black pb-5"> */}
         <div
@@ -169,11 +161,13 @@ export async function getServerSideProps({ req }) {
     const userId = session.user.username;
     //get requests
     const curUser = await getUserProfile(userId, client);
+    const userResults = await getAllUsers(userId, client);
 
     return {
       props: {
         providers: providers,
         currentUser: JSON.parse(JSON.stringify(curUser)),
+        userResults: JSON.parse(JSON.stringify(userResults)),
       },
     };
   }
@@ -196,4 +190,18 @@ async function getUserProfile(UID, client) {
   };
   const curUser = await db.collection("users").findOne({ id: UID }, options);
   return curUser;
+}
+
+async function getAllUsers(UID, client) {
+  const agg = [
+    {
+      '$match': {
+        'id': UID,
+      }
+    }
+  ];
+  const db = client.db(process.env.MONGODB_NAME);
+  const coll = db.collection('users').aggregate(agg);
+  const allUsers = await coll.toArray();
+  return allUsers;
 }

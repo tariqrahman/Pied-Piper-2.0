@@ -2,7 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import logo from '../public/logo.png';
 import { useSession, getSession, signIn, signOut } from 'next-auth/react';
-import handleAlert from '@/lib/helpers';
+import handleAlert from '@/lib/alert';
 import { useState } from 'react';
 import { Dialog } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
@@ -106,7 +106,7 @@ export default function Layout({ ...props }) {
                             <>
                               <button
                                 onClick={() => {
-                                  signIn(provider.id, { callbackUrl: '/' });
+                                  signIn(provider.id, { callbackUrl: '/sprofile2' });
                                   handleAlert(true);
                                 }}
                                 className='-mx-3 block rounded-lg py-2.5 px-3 text-base font-semibold leading-7 text-white hover:bg-gray-800'
@@ -157,7 +157,7 @@ export default function Layout({ ...props }) {
                       <button
                         className='text-sm font-semibold leading-6 text-zinc-300 hover:text-gray-600'
                         onClick={() => {
-                          signIn(provider.id, { callbackUrl: '/' });
+                          signIn(provider.id, { callbackUrl: '/sprofile2' });
                           handleAlert(true);
                         }}
                       >
