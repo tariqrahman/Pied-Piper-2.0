@@ -31,6 +31,10 @@ export default function MyPage({
   currentUser,
 }) {
   var userData = profileData;
+  const router = useRouter();
+  const handleClick = () => {
+    router.replace("/users");
+  }
   //console.log(spotifyData)
   return (
     <div>
@@ -50,7 +54,7 @@ export default function MyPage({
                   <div className="mt-10 flex items-center justify-center gap-x-6">
                     <button
                       className="rounded-md bg-sky-500 px-3.5 py-1.5 text-base font-semibold leading-7 text-white shadow-sm hover:bg-sky-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                      onClick={() =>
+                      onClick={() =>{
                         generateData(
                           profileData,
                           topTrackData,
@@ -58,7 +62,9 @@ export default function MyPage({
                           likedTrackData,
                           idLikedTrackData,
                           followerTable,
-                        )
+                        );
+                        handleClick();
+                      }
                       }
                     >
                       get started
