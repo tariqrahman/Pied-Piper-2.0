@@ -48,7 +48,7 @@ function Aboutus({ providers, currentUser }) {
                   What is that common ground?
                 </h1>
                 <p className='mt-2 text-lg leading-8 text-zinc-300'>
-                  Users you match with on Audiolink share similar top artists to
+                  Users you match with share similar top artists to
                   you. From there, you can access their Spotify profiles and
                   take it from there. Start exchanging playlists, songs, and
                   even introduce new artists. Immerse yourself into new worlds
