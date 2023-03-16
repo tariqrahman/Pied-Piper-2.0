@@ -36,9 +36,10 @@ export default function MyPage({
   const handleClick = () => {
     router.replace('/users');
   };
+  console.log(userResults);
   useEffect(() => {
-    if (userResults) {
-      router.replace('/dashboard');
+    if (userResults != null && userResults.length > 0) {
+      router.replace('/users');
     }
   });
   return (
