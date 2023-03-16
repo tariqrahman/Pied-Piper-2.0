@@ -1,11 +1,16 @@
-import { useRouter } from 'next/router';
-import { useState } from 'react';
-import { getProviders } from 'next-auth/react';
-import Image from 'next/image';
-import spotify_logo from '../../public/spotify-icons-logos/logos/01_RGB/02_PNG/Spotify_Logo_RGB_Green.png';
-import Layout from '@/components/layout';
+import { useRouter } from "next/router";
+import { useState } from "react";
+import { getProviders } from "next-auth/react";
+import Image from "next/image";
+import spotify_logo from "../../public/spotify-icons-logos/logos/01_RGB/02_PNG/Spotify_Logo_RGB_Green.png";
+import Layout from "@/components/layout";
+import { getSession } from "next-auth/react";
+import Footer from "@/components/footer";
+import UserOnUsers from "../../components/userinfo-users";
+import UserDisplay from "@/components/list-active-users";
+import clientPromise from "@/lib/mongodb";
 
-function UserList({ providers }) {
+function UserList({ providers, currentUser, allInfo }) {
   //userid should be used to get data related to user to display on page
   const router = useRouter();
   const userId = router.query.userId;
@@ -13,269 +18,38 @@ function UserList({ providers }) {
 
   //add some call to add stuff to mongodb database
   const followUser = () => {
-    console.log('followed user(#' + { userId } + ')');
+    console.log("followed user(#" + { userId } + ")");
   };
-
   return (
-    <div className='min-h-screen dark:bg-[#000000]'>
-      <Layout providers={providers}>
-        <div className='h-max bg-black pb-5'>
-          <div className='flex mx-auto flex-col w-8/12 align-middle gap-3'>
+    <div className="min-h-screen bg-zinc-900">
+      <Layout providers={providers} currentUser={currentUser}>
+        <div className="min-h-screen h-max bg-zinc-900 pb-5">
+          <div className="flex mx-auto flex-col w-8/12 align-middle gap-3">
             {/* profile header */}
-            <div className=''>
-              <div className='flex container flex-row text-white justify-between px-2 pt-3 text-md'>
+            <div className="">
+              <div className="flex container flex-row text-zinc-300 justify-between px-2 pt-6 text-md">
                 {/** left */}
-                <div className='text-3xl'>List of Active Users</div>
+                <div className="text-3xl font-semibold">
+                  List of Active Users
+                </div>
                 {/** right */}
-                <div className='flex h-auto w-32'>
-                  <Image className='' src={spotify_logo} alt='spotify logo' />
+                <div className="flex h-auto w-32 hover:scale-105">
+                  <a href="https://open.spotify.com/" target="_blank">
+                    <Image className="" src={spotify_logo} alt="spotify logo" />
+                  </a>
                 </div>
               </div>
             </div>
             {/** profile image, username/details, follow button*/}
-            <div className='p-1 divide-y divide-solid gap-2'>
-              <div className='flex flex-row text-white justify-left text-md rounded-full py-2 divide-x divide-solid divide-cyan-400'>
-                {/** left user profile image*/}
-                <div className='flex items-center w-2/12 shrink-0 text-3xl pt-2 pb-2'>
-                  <div className='flex justify-center h-fit'>
-                    <div className='w-auto h-auto'>
-                      <img
-                        className=' flex shrink-0 bg-cover lg:h-32 lg:w-32 sm:h-24 sm:w-24 rounded-full'
-                        src='https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80'
-                        alt='logo'
-                      ></img>
-                    </div>
-                  </div>
-                </div>
-                {/** right col */}
-                <div className='flex shrink flex-col w-10/12 rounded-lg'>
-                  <div className='flex-col py-1'>
-                    {/** header with username and follow button */}
-                    <div className='flex flex-row justify-between items-center flex-wrap ml-1'>
-                      {/** left */}
-                      <div className='lg:text-3xl md:text-3xl sm:text-3xl break-words pl-1'>
-                        DISPLAY_NAME
-                      </div>
-                      {/** right */}
-                      <button
-                        className='border-solid border-2 w-28 h-7 border-cyan-500'
-                        onClick={followUser}
-                      >
-                        Follow +
-                      </button>
-                    </div>
-
-                    {/** tracks pertaining to user */}
-                    <div className='ml-2 p-1 pb-2 divide-y divide-solid divide-zinc-700 '>
-                      <div className='flex container flex-row text-white justify-between mb-1 text-md'>
-                        <div className='flex'>Most Listened Tracks</div>
-                        <div className='flex text-blue-400 '></div>
-                      </div>
-                      {/** dynamically pull top 3 songs from spotify based on user */}
-                      {/* list of top 3 most listened tracks */}
-                      <div className=' flex flex-col text-white justify-left gap-2 px-2 divide-y divide-solid divide-zinc-900'>
-                        <div className='flex flex-row items-center gap-2 h-fit shrink-0 pt-0.5'>
-                          <img
-                            className='h-8 w-8'
-                            src='https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80'
-                            alt='logo'
-                          ></img>
-                          <div className='flex container flex-row justify-between'>
-                            <div className=''>Song_name</div>
-                            <div className=''>Artist | Album</div>
-                          </div>
-                        </div>
-                        <div className='flex flex-row items-center gap-2 h-fit shrink-0 pt-0.5'>
-                          <img
-                            className='h-8 w-8'
-                            src='https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80'
-                            alt='logo'
-                          ></img>
-                          <div className='flex container flex-row justify-between'>
-                            <div className=''>Song_name</div>
-                            <div className=''>Artist | Album</div>
-                          </div>
-                        </div>
-                        <div className='flex flex-row items-center gap-2 h-fit shrink-0 pt-0.5'>
-                          <img
-                            className='h-8 w-8'
-                            src='https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80'
-                            alt='logo'
-                          ></img>
-                          <div className='flex container flex-row justify-between'>
-                            <div className=''>Song_name</div>
-                            <div className=''>Artist | Album</div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className='p-1 divide-y divide-solid gap-2'>
-              <div className='flex flex-row text-white justify-left text-md rounded-full py-2 divide-x divide-solid divide-cyan-400'>
-                {/** left user profile image*/}
-                <div className='flex items-center w-2/12 shrink-0 text-3xl pt-2 pb-2'>
-                  <div className='flex justify-center h-fit'>
-                    <div className='w-auto h-auto'>
-                      <img
-                        className=' flex shrink-0 bg-cover lg:h-32 lg:w-32 sm:h-24 sm:w-24 rounded-full'
-                        src='https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80'
-                        alt='logo'
-                      ></img>
-                    </div>
-                  </div>
-                </div>
-                {/** right col */}
-                <div className='flex shrink flex-col w-10/12 rounded-lg'>
-                  <div className='flex-col py-1'>
-                    {/** header with username and follow button */}
-                    <div className='flex flex-row justify-between items-center flex-wrap ml-1'>
-                      {/** left */}
-                      <div className='lg:text-3xl md:text-3xl sm:text-3xl break-words pl-1'>
-                        DISPLAY_NAME
-                      </div>
-                      {/** right */}
-                      <button
-                        className='border-solid border-2 w-28 h-7 border-cyan-500'
-                        onClick={followUser}
-                      >
-                        Follow +
-                      </button>
-                    </div>
-
-                    {/** tracks pertaining to user */}
-                    <div className='ml-2 p-1 pb-2 divide-y divide-solid divide-zinc-700 '>
-                      <div className='flex container flex-row text-white justify-between mb-1 text-md'>
-                        <div className='flex'>Most Listened Tracks</div>
-                        <div className='flex text-blue-400 '></div>
-                      </div>
-                      {/** dynamically pull top 3 songs from spotify based on user */}
-                      {/* list of top 3 most listened tracks */}
-                      <div className=' flex flex-col text-white justify-left gap-2 px-2 divide-y divide-solid divide-zinc-900'>
-                        <div className='flex flex-row items-center gap-2 h-fit shrink-0 pt-0.5'>
-                          <img
-                            className='h-8 w-8'
-                            src='https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80'
-                            alt='logo'
-                          ></img>
-                          <div className='flex container flex-row justify-between'>
-                            <div className=''>Song_name</div>
-                            <div className=''>Artist | Album</div>
-                          </div>
-                        </div>
-                        <div className='flex flex-row items-center gap-2 h-fit shrink-0 pt-0.5'>
-                          <img
-                            className='h-8 w-8'
-                            src='https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80'
-                            alt='logo'
-                          ></img>
-                          <div className='flex container flex-row justify-between'>
-                            <div className=''>Song_name</div>
-                            <div className=''>Artist | Album</div>
-                          </div>
-                        </div>
-                        <div className='flex flex-row items-center gap-2 h-fit shrink-0 pt-0.5'>
-                          <img
-                            className='h-8 w-8'
-                            src='https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80'
-                            alt='logo'
-                          ></img>
-                          <div className='flex container flex-row justify-between'>
-                            <div className=''>Song_name</div>
-                            <div className=''>Artist | Album</div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className='p-1 divide-y divide-solid gap-2'>
-              <div className='flex flex-row text-white justify-left text-md rounded-full py-2 divide-x divide-solid divide-cyan-400'>
-                {/** left user profile image*/}
-                <div className='flex items-center w-2/12 shrink-0 text-3xl pt-2 pb-2'>
-                  <div className='flex justify-center h-fit'>
-                    <div className='w-auto h-auto'>
-                      <img
-                        className=' flex shrink-0 bg-cover lg:h-32 lg:w-32 sm:h-24 sm:w-24 rounded-full'
-                        src='https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80'
-                        alt='logo'
-                      ></img>
-                    </div>
-                  </div>
-                </div>
-                {/** right col */}
-                <div className='flex shrink flex-col w-10/12 rounded-lg'>
-                  <div className='flex-col py-1'>
-                    {/** header with username and follow button */}
-                    <div className='flex flex-row justify-between items-center flex-wrap ml-1'>
-                      {/** left */}
-                      <div className='lg:text-3xl md:text-3xl sm:text-3xl break-words pl-1'>
-                        DISPLAY_NAME
-                      </div>
-                      {/** right */}
-                      <button
-                        className='border-solid border-2 w-28 h-7 border-cyan-500'
-                        onClick={followUser}
-                      >
-                        Follow +
-                      </button>
-                    </div>
-
-                    {/** tracks pertaining to user */}
-                    <div className='ml-2 p-1 pb-2 divide-y divide-solid divide-zinc-700 '>
-                      <div className='flex container flex-row text-white justify-between mb-1 text-md'>
-                        <div className='flex'>Most Listened Tracks</div>
-                        <div className='flex text-blue-400 '></div>
-                      </div>
-                      {/** dynamically pull top 3 songs from spotify based on user */}
-                      {/* list of top 3 most listened tracks */}
-                      <div className=' flex flex-col text-white justify-left gap-2 px-2 divide-y divide-solid divide-zinc-900'>
-                        <div className='flex flex-row items-center gap-2 h-fit shrink-0 pt-0.5'>
-                          <img
-                            className='h-8 w-8'
-                            src='https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80'
-                            alt='logo'
-                          ></img>
-                          <div className='flex container flex-row justify-between'>
-                            <div className=''>Song_name</div>
-                            <div className=''>Artist | Album</div>
-                          </div>
-                        </div>
-                        <div className='flex flex-row items-center gap-2 h-fit shrink-0 pt-0.5'>
-                          <img
-                            className='h-8 w-8'
-                            src='https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80'
-                            alt='logo'
-                          ></img>
-                          <div className='flex container flex-row justify-between'>
-                            <div className=''>Song_name</div>
-                            <div className=''>Artist | Album</div>
-                          </div>
-                        </div>
-                        <div className='flex flex-row items-center gap-2 h-fit shrink-0 pt-0.5'>
-                          <img
-                            className='h-8 w-8'
-                            src='https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80'
-                            alt='logo'
-                          ></img>
-                          <div className='flex container flex-row justify-between'>
-                            <div className=''>Song_name</div>
-                            <div className=''>Artist | Album</div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            {allInfo.map((user, idx) => {
+              return (
+                <UserDisplay followHandler={followUser} data={user} key={idx} />
+              );
+            })}
           </div>
         </div>
       </Layout>
+      <Footer></Footer>
       {/** header */}
 
       {/* body */}
@@ -283,42 +57,136 @@ function UserList({ providers }) {
   );
 }
 
-export async function getServerSideProps() {
+export async function getServerSideProps({ req }) {
   const providers = await getProviders();
-
+  const client = await clientPromise;
+  const session = await getSession({ req });
+  const userId = session.user.username;
+  //get requests
+  const allData = await populate(userId, client);
+  const [curUser, _] = await getData(userId, client);
   return {
     props: {
-      providers,
+      providers: providers,
+      currentUser: JSON.parse(JSON.stringify(curUser)),
+      allInfo: JSON.parse(JSON.stringify(allData)),
     },
   };
 }
 
+async function getData(UID, client) {
+  const db = client.db(process.env.MONGODB_NAME);
+  const options = {
+    // Include only the `display_name` and `id` fields in the returned document
+    projection: { _id: 0, display_name: 1, id: 1, images: 1 },
+  };
+
+  const curUser = await db.collection("users").findOne({ id: UID }, options);
+  const allUsers = await db.collection("users").find({}, options).toArray();
+  return [curUser, allUsers];
+}
+
+// should have image, song name, artist, maybe album
+async function getUserLikedSongs(UID, client, displayName, userImage) {
+  const pipeline = [
+    {
+      $match: {
+        id: UID,
+      },
+    },
+    {
+      $replaceRoot: {
+        newRoot: "$likedTrackData",
+      },
+    },
+    {
+      $project: {
+        items: {
+          track: {
+            name: 1,
+            album: {
+              name: 1,
+              href: 1,
+              images: 1,
+            },
+            artists: {
+              href: 1,
+              name: 1,
+            },
+            popularity: 1,
+          },
+        },
+      },
+    },
+  ];
+  const coll = client
+    .db(process.env.MONGODB_NAME)
+    .collection("user-liked-tracks");
+  const cursor = coll.aggregate(pipeline);
+  const result = await cursor.toArray();
+  const likedTracks = {};
+  likedTracks["display_name"] = displayName;
+  likedTracks["user_img_url"] = userImage;
+  likedTracks["userid"] = UID;
+  likedTracks["tracks"] = result[0].items;
+  return likedTracks;
+}
+
+async function populate(userId, client) {
+  const [_, allUsers] = await getData(userId, client);
+  const promises = allUsers.map(async (user) => {
+    const entry = await getUserLikedSongs(
+      user["id"],
+      client,
+      user["display_name"],
+      user["images"][0]["url"]
+    );
+    console.log(entry);
+    return entry;
+  });
+  const allData = await Promise.all(promises);
+  return allData;
+}
+
 export default UserList;
 
-//use 0 as no id inputted and do something else to handle this case
-//external websites links will use normal html anchor tag
-//use Link for internal links, else you would reset any client state you are currently maintaining
-// function userList({userId = 0}){
-//     return(
-//         <div className="container">
-//             <Link href='/'>
-//                 <div>
-//                 <a>homepage</a>
-//                 </div>
-//             </Link>
-//             <Link href={`/users/${userId}`}>
-//                 <div>
-//                 <a>user 1</a>
-//                 </div>
-//             </Link>
-//             <Link href={`/users/${userId}`}>
-//                 <div>
-//                     <a>user {userId}</a>
-//                 </div>
-//             </Link>
-//         </div>
-//     )
-// }
+// follow button stuff
+async function getFollowData(UID, client) {
+  const db = client.db(process.env.MONGODB_NAME);
+  const pipeline = [
+    {
+      $match: {
+        id: UID,
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        id: 1,
+        follower: 1,
+        following: 1,
+      },
+    },
+  ];
 
-// export default userList
+  const coll = client
+    .db(process.env.MONGODB_NAME)
+    .collection("user-followed-users");
+  const cursor = coll.aggregate(pipeline);
+  const result = await cursor.toArray();
 
+  return result;
+}
+//given a list of ids get all ids in list
+async function getUsersByIds(userIds, client) {
+  try {
+    const database = client.db(process.env.MONGODB_NAME);
+    const users = await database
+      .collection("users")
+      .find({ id: { $in: userIds } })
+      .toArray();
+    return users;
+  } catch (error) {
+    console.error(error);
+  }
+}

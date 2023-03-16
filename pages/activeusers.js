@@ -5,6 +5,7 @@ import Image from 'next/image';
 import spotify_logo from '../../public/spotify-icons-logos/logos/01_RGB/02_PNG/Spotify_Logo_RGB_Green.png';
 import Layout from '@/components/layout';
 import UserOnUsers from '@/components/userinfo-users';
+import Footer from '@/components/footer';
 
 
 function ActiveUsers({ providers }) {
@@ -22,10 +23,10 @@ function ActiveUsers({ providers }) {
     <div className="">
             <Layout providers={providers}>
                 {/* body */}
-                <div className='min-h-screen dark:bg-[#000000]'>
-                  <div className='h-max bg-black pb-5'>
+                <div className='min-h-screen bg-zinc-900'>
+                  <div className='h-max bg-zinc-900 pb-5'>
                   {/* profile header */}
-                  <div className='flex container flex-row text-white justify-between px-2 pt-3 text-md'>
+                  <div className='flex container flex-row text-zinc-300 justify-between px-2 pt-3 text-md'>
                   {/** left */}
                   <div className='text-3xl'>
                     List of Active Users
@@ -45,9 +46,7 @@ function ActiveUsers({ providers }) {
               </div>
               </div>
           </Layout>
-          {/**header */}
-
-          {/*body*/}
+          <Footer />
         </div>
  );
 }
