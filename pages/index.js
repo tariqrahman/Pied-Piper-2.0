@@ -51,19 +51,19 @@ function homePage({ providers, currentUser, userResults }) {
       icon: LockClosedIcon,
     },
     {
-      name: 'in-depth analysis',
+      name: 'In-depth analysis',
       description:
         "By utilzing the Spotify API, data is drawn directly from a user's account. This ensures that a user's reccomendations of other users with similar taste are accurate and up-to-date!",
       icon: ChatBubbleBottomCenterIcon,
     },
     {
-      name: 'database',
+      name: 'Database',
       description:
         'Once a user logs into our application, their profile data and listening habits are posted to our database. Using MongoDB, we are able to match existing users based on their listening habits.',
       icon: HashtagIcon,
     },
     {
-      name: 'community',
+      name: 'Community',
       description:
         "Connect with other Bruins with similar and different music taste than you! you can explore all users via the 'user' tab and similar users via the dashboard.",
       icon: HeartIcon,
@@ -110,7 +110,7 @@ function homePage({ providers, currentUser, userResults }) {
           <div className='mx-auto max-w-7xl px-6 lg:px-8 py-16'>
             <div className='mx-auto max-w-2xl lg:text-center'>
               <p className='mt-2 pb-4 text-3xl font-bold tracking-tight text-zinc-900 sm:text-4xl'>
-                features
+                Features
               </p>
               <Lottie options={defaultOptions} height={40} width={150} />
               <p className='mt-6 text-lg leading-8 text-zinc-900'>
