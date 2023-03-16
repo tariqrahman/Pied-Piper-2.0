@@ -1,7 +1,8 @@
+import Link from "next/link";
 export default function UserDisplay({ ...props }) {
   const imgURL = props.data['user_img_url']
   return (
-    <div
+    <div className="w-9/12 company-text"
       style={{
         display: "flex",
         gap: "20px 50px",
@@ -16,7 +17,7 @@ export default function UserDisplay({ ...props }) {
 
 export function ProfileImage({...props}) {
   return (
-    <div>
+    <div className="shrink-0 flex">
       <img
         style={{ width: "150px", height: "150px", borderRadius: "50%", marginTop: "30px" }}
         src={props.src}
@@ -81,7 +82,7 @@ function DisplayTracks({...props}) {
               ></img>
               <div className="flex container flex-row justify-between">
                 <div className="">{song_name}</div>
-                <div className="">{artist} | {album}</div>
+                <div className="text-zinc-400">{artist} | {album}</div>
               </div>
             </div>
         )
@@ -92,6 +93,9 @@ function DisplayTracks({...props}) {
 
 export function UserData({...props}) {
   const displayedData = processData(props.data);
+  console.log("userid here");
+  console.log(displayedData['id']);
+  const id = displayedData['id'];
   const name = displayedData["display_name"];
   const tracks = displayedData["top_tracks"];
   return (
@@ -110,13 +114,15 @@ export function UserData({...props}) {
         {/* username & follow button */}
         <div className="flex flex-row justify-between items-center  ml-1">
           <p style={{ color: "white", fontSize: 25 }}>{name}</p>
+          <Link href={'http://localhost:3000/users/'+id+'/profile'}>
           <button
             style={{ color: "white" }}
-            className="border-solid border-2 w-28 h-7 border-cyan-500"
+            className="border-solid border-2 w-28 h-7 border-cyan-500 hover:scale-105 hover:bg-sky-700"
             onClick={props.followUser}
-          >
-            Follow +
+            >
+            Profile 
           </button>
+            </Link>
         </div>
 
         {/* tracks for user */}
