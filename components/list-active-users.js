@@ -101,6 +101,7 @@ export function UserData({ ...props }) {
   const tracks = displayedData["top_tracks"];
   return (
     <div
+    className=""
       style={{
         flexDirection: "row",
       }}
@@ -113,7 +114,7 @@ export function UserData({ ...props }) {
         }}
       >
         {/* username & follow button */}
-        <div className="flex flex-row justify-between items-center text-zinc-300 text-3xl text-semibold ml-1">
+        <div className="flex flex-row justify-between items-center text-zinc-300 text-3xl font-semibold ml-1 font-sans py-8">
           {name}
           <Link href={"http://localhost:3000/users/" + id + "/profile"}>
             <button
@@ -128,12 +129,12 @@ export function UserData({ ...props }) {
         {/* tracks for user */}
         <div className="ml-2 p-1 pb-2 divide-y divide-solid divide-zinc-700 ">
           <div className="flex container flex-row text-zinc-300 justify-between mb-1 text-xl">
-            <div className="flex">Most Listened Tracks</div>
+            <div className="flex font-semibold">Most Listened Tracks</div>
             <div className="flex text-blue-400 "></div>
           </div>
           {/** dynamically pull top 3 songs from spotify based on user */}
           {/* list of top 3 most listened tracks */}
-          <div className=" flex flex-col text-zinc-300 justify-left gap-2 px-2 divide-y divide-solid divide-zinc-900 py-2">
+          <div className=" flex flex-col text-zinc-300 justify-left gap-2 px-2 divide-y divide-solid divide-zinc-900 py-2 font-semibold">
             <DisplayTracks tracks={tracks} />
           </div>
         </div>

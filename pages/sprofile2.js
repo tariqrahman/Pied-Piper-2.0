@@ -58,7 +58,7 @@ export default function MyPage({
                         alt='speaker_icon'
                       />
                     </h1>
-                    <p className='mt-6 text-3xl company-text text-white'>
+                    <p className='mt-6 text-3xl text-white'>
                       Nothing to Recommend
                     </p>
                     <div className='mt-10 flex items-center justify-center gap-x-6'>

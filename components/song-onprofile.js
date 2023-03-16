@@ -40,12 +40,12 @@ export default function SongOnProfile({ ...props }) {
     var artistName = artistData.name;
     var artistLink = "https://open.spotify.com/search/"+artistName;
     trackObj.push(
-      <div className="flex flex-col w-32 align-middle hover:rounded-xl gap-1 min-w-min shrink-0 hover:bg-zinc-900 hover:scale-105 ">
+      <div className="flex flex-col w-32 align-middle hover:rounded-xl gap-1 min-w-min shrink-0 hover:bg-zinc-900 hover:scale-105 font-sans">
         <a href={albumLink}><img className=" h-32 bg-cover" src={imgSrc} alt="albumcover"></img></a>
         <a href={trackLink}><div className="flex text-md bold">
           {trackName}
         </div></a>
-        <a href={artistLink}><div className="flex text-sm text-zinc-300">
+        <a href={artistLink}><div className="flex text-sm text-zinc-300 font-sans">
           {artistName}
         </div></a>
       </div>
