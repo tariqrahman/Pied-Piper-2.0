@@ -1,6 +1,6 @@
-import NextAuth from "next-auth"
-import SpotifyProvider from "next-auth/providers/spotify"
-import { LOGIN_URL } from "@/lib/spotify"
+import NextAuth from "next-auth";
+import SpotifyProvider from "next-auth/providers/spotify";
+import { LOGIN_URL } from "@/lib/spotify";
 import spotifyApi from "@/lib/spotify";
 
 
@@ -73,7 +73,7 @@ export const authOptions = {
         session.user.accessToken = token.accessToken;
         session.user.refreshToken = token.refreshToken;
         session.user.username = token.username;
-
+        // console.log(token)
         return session;
     }
 

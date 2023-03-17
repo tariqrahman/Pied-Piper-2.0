@@ -1,400 +1,481 @@
 import { useRouter } from "next/router";
-import { useState } from "react";
-import { Dialog } from "@headlessui/react";
-import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-import { getProviders, signIn, signOut } from "next-auth/react";
-import Link from "next/link";
+import { getProviders } from "next-auth/react";
 import Image from "next/image";
 import spotify_logo from "../../../public/spotify-icons-logos/logos/01_RGB/02_PNG/Spotify_Logo_RGB_Green.png";
-import logo from "../../../public/logo.png";
+import Layout from "@/components/layout";
+import Footer from "@/components/footer";
+import SongOnProfile from "@/components/song-onprofile";
+import UserOnProfile from "@/components/other-user-onprofile";
+import clientPromise from "@/lib/mongodb";
+import { getSession } from "next-auth/react";
+import { list } from "postcss";
+import { useState } from "react";
 
-const navigation = [
-  { name: "about us", href: "#" },
-  { name: "users", href: "/users" },
-  { name: "old home page", href: "/oldhomepage" },
-  { name: 'dashboard', href: '/dashboard'},
-  { name: 'profile', href: '/users/1234/profile'}
-];
-
-function Profile({ providers }) {
-  //userid should be used to get data related to user to display on page
+// Pass in data fetched from database as props
+function Profile({
+  providers,
+  currentUser,
+  userLikedTracks,
+  profileContent,
+  followData,
+  listFollowers,
+  listFollowings,
+}) {
+  console.log(currentUser);
+  console.log(profileContent);
+  console.log(followData);
+  // Userid should be used to get data related to user to display on page
   const router = useRouter();
   const userId = router.query.userId;
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  
-  //add some call to add stuff to mongodb database
-  const followUser = () => {
-    console.log("followed user(#" + { userId } + ")");
-  };
+  console.log(profileContent);
 
+  const userData = profileContent[0];
+  const display_name = userData.display_name;
+  const userLink = userData.href;
+  // Hold meta data for users profile picture
+  const imageData = userData.images[0];
+  const imgSrc = imageData.url;
+  // Organize follower data
+  console.log(followData);
+  const followArr = Object.entries(followData);
+  const followDataMap = followArr[0][1];
+  console.log(followDataMap.id);
+  // Cur is session user
+  const curFollowers = followDataMap.follower;
+  const curFollowings = followDataMap.following;
+  var followed = false;
+  var ownProfile = false;
+  // Check if current profile is followed by session user
+  if (followDataMap.id == userId) {
+    ownProfile = true; // Override when looking at own profile
+  } else {
+    for (var i = 0; i < curFollowers.length; i++) {
+      console.log("in loop for following");
+      if (curFollowings[i] == userId) {
+        console.log("already followed this person");
+        followed = true;
+        break;
+      }
+    }
+  }
+  
+  // Follow and unfollow user
+  // If not currently following then follow on click, if already following then unfollow on click
+  const [followStatus, setFollowStatus] = useState(followed ? "Unfollow":"Follow");
+  const handleClick = () => {
+    if(followStatus == "Follow"){
+      followed = !followed;
+      setFollowStatus("Unfollow");
+    }
+    if(followStatus == "Unfollow"){
+      followed = !followed;
+      setFollowStatus("Follow")
+    }
+  };
   return (
     <div>
-      {/** header */}
-      <div className="isolate bg-black border-b border-zinc-800 text-white">
-        {/*navbar container*/}
-        <div className="">
-          {/* navbar header */}
-          <nav
-            className="flex items-center justify-between py-3 px-10"
-            aria-label="Global"
-          >
-            <div className="flex lg:flex-1">
-              <Link href="/" className=" -m-1.5 p-1.5">
-                <div className="flex flex-row items-center gap-2.5">
-                  <Image className="flex" src={logo} alt="company logo" />
-                  <div className="flex text-xl company-text">AudioLink</div>
-                </div>
-              </Link>
-            </div>
-            <div className="flex lg:hidden">
-              <button
-                type="button"
-                className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-zinc-300"
-                onClick={() => setMobileMenuOpen(true)}
-              >
-                <span className="sr-only">Open main menu</span>
-                <Bars3Icon className="h-6 w-6" aria-hidden="true" />
-              </button>
-            </div>
-            {/* navbar is here */}
-            <div className="hidden lg:flex lg:gap-x-12">
-              {navigation.map((item) => (
-                <a
-                  key={item.name}
-                  href={item.href}
-                  className="text-sm font-semibold leading-6 text-zinc-300"
-                >
-                  {item.name}
-                </a>
-              ))}
-            </div>
-            <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-              {Object.values(providers).map((provider) => (
-                <div key={provider.name}>
-                  <button
-                    className="text-sm font-semibold leading-6 text-zinc-300"
-                    onClick={() => signIn(provider.id, { callbackUrl: "/" })}
-                  >
-                    {" "}
-                    log in <span aria-hidden="true">&rarr;</span>
-                  </button>
-                </div>
-              ))}
-            </div>
-          </nav>
-          {/* navbar menu  */}
-          <Dialog as="div" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
-            <Dialog.Panel
-              focus="true"
-              className="fixed inset-0 z-10 overflow-y-auto bg-white px-6 py-6 lg:hidden"
-            >
-              <div className="flex items-center justify-between">
-                <a href="#" className="-m-1.5 p-1.5">
-                  <span className="sr-only">Your Company</span>
-                  <img
-                    className="h-8"
-                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                    alt=""
-                  />
-                </a>
-                <button
-                  type="button"
-                  className="-m-2.5 rounded-md p-2.5 text-gray-700"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  <span className="sr-only">Close menu</span>
-                  <XMarkIcon className="h-6 w-6" aria-hidden="true" />
-                </button>
-              </div>
-              <div className="mt-6 flow-root">
-                <div className="-my-6 divide-y divide-gray-500/10">
-                  <div className="space-y-2 py-6">
-                    {navigation.map((item) => (
-                      <a
-                        key={item.name}
-                        href={item.href}
-                        className="-mx-3 block rounded-lg py-2 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-400/10"
-                      >
-                        {item.name}
-                      </a>
-                    ))}
+      <Layout providers={providers} currentUser={currentUser}>
+        {/* body */}
+        <div className="max-w-screen bg-zinc-900 pb-5 text-semi-bold">
+          <div className="flex mx-auto flex-col w-8/12 align-middle gap-3">
+            {/** profile image, username/details, follow button*/}
+            <div className="">
+              <div className="flex container flex-row text-zinc-300 justify-left text-md pt-4 xl:text-6xl xl:pt-12 lg:text-5xl lg:pt-10  md:text-4xl sm:text-3xl text-2xl pb-2 break-words">
+                {/** left */}
+                <div className="flex w-4/12 text-3xl pl-2 pt-2 pb-2">
+                  <div className="w-auto h-auto">
+                    <img
+                      className="flex shrink:0 bg-cover lg:h-52 lg:w-52 md:h-36 md:w-36 sm:h-36 sm:w-36 rounded-full"
+                      src={imgSrc}
+                      alt="user profile image"
+                    ></img>
                   </div>
-                  <div className="py-6">
-                    <a
-                      href="#"
-                      className="-mx-3 block rounded-lg py-2.5 px-3 text-base font-semibold leading-6 text-gray-900 hover:bg-gray-400/10"
+                </div>
+                {/** right */}
+                <div className="flex shrink flex-col w-9/12">
+                  <div className="">
+                    {display_name}
+                  </div>
+                  
+                  {ownProfile ? (<></>): followed ? (
+                    <button
+                      className="text-sm ml-1 mt-3 items-center border-solid border-2 w-28 h-7 border-sky-300 text-sky-300 hover:border-cyan-400 hover:text-cyan-100 hover:bg-sky-700"
+                      onClick={() => {unfollowUser(userId, currentUser); handleClick()}}
                     >
-                      Log in
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </Dialog.Panel>
-          </Dialog>
-        </div>
-      </div>
-      {/* body */}
-      <div className="min-h-screen dark:bg-[#000000] pb-5">
-        <div className="flex mx-auto flex-col w-8/12 align-middle gap-3">
-          {/* profile header */}
-          <div className="">
-            <div className="flex container flex-row text-white justify-between px-2 pt-3 text-md">
-              {/** left */}
-              <div className="text-3xl">PROFILE(user #{userId})</div>
-              {/** right */}
-              <div className="flex h-auto w-32">
-                <Image className="" src={spotify_logo} alt="spotify logo" />
-              </div>
-            </div>
-          </div>
-          {/** profile image, username/details, follow button*/}
-          <div className="">
-            <div className="flex container flex-row text-white justify-left pt-3 text-md">
-              {/** left */}
-              <div className="flex w-4/12 text-3xl pl-2 pt-2 pb-2">
-                <div className="w-auto h-auto">
-                  <img
-                    className="flex shrink bg-cover lg:h-52 lg:w-52 md:h-36 md:w-36 rounded-full"
-                    src="https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80"
-                    alt="logo"
-                  ></img>
-                </div>
-              </div>
-              {/** right */}
-              <div className="flex shrink flex-col w-9/12">
-                <div className="lg:text-6xl md:text-4xl pt-4 break-words">
-                  DISPLAY_NAME
-                </div>
-                <button
-                  className="ml-1 mt-3 border-solid border-2 w-32 h-8"
-                  onClick={followUser}
-                >
-                  Follow +
-                </button>
-              </div>
-            </div>
-          </div>
-          {/** list of top 5 most listened tracks of the user */}
-          <div className="lg:ml-12 md:ml-6 w-11/12">
-            <div className="flex container flex-row text-white justify-between px-2 pt-2 pb-2 text-md">
-              <div className="flex">Most Listened Tracks</div>
-              <div className="flex text-blue-400 ">Show More</div>
-            </div>
-            {/* follwed users carousel/scroll */}
-            <div className="flex flex-col gap-3 snap-x snap-proximity">
-              {/* list elements should be dynamically created later */}
-              <div className="flex flex-row text-white justify-left gap-2 px-2 snap-center scroll-smooth overflow-x-auto">
-                <div className="flex flex-col w-32 align-middle rounded-lg gap-2 min-w-min  h-fit shrink-0">
-                  <img
-                    className="h-32 w-32 "
-                    src="https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80"
-                    alt="logo"
-                  ></img>
-                  <div className="text-left">Track1</div>
-                </div>
-                <div className="flex flex-col w-32 align-middle rounded-lg gap-2 min-w-min  h-fit shrink-0">
-                  <img
-                    className="h-32 w-32 "
-                    src="https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80"
-                    alt="logo"
-                  ></img>
-                  <div className="text-left">Track2</div>
-                </div>
-                <div className="flex flex-col w-32 align-middle rounded-lg gap-2 min-w-min  h-fit shrink-0">
-                  <img
-                    className="h-32 w-32 "
-                    src="https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80"
-                    alt="logo"
-                  ></img>
-                  <div className="text-left">Track3</div>
-                </div>
-                <div className="flex flex-col w-32 align-middle rounded-lg gap-2 min-w-min  h-fit shrink-0">
-                  <img
-                    className="h-32 w-32 "
-                    src="https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80"
-                    alt="logo"
-                  ></img>
-                  <div className="text-left">Track4</div>
-                </div>
-                <div className="flex flex-col w-32 align-middle rounded-lg gap-2 min-w-min  h-fit shrink-0">
-                  <img
-                    className="h-32 w-32 "
-                    src="https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80"
-                    alt="logo"
-                  ></img>
-                  <div className="text-left">Track5</div>
+                      {followStatus}
+                    </button>
+                  ) : (
+                    <button
+                      className="text-sm ml-1 mt-3 items-center border-solid border-2 w-28 h-7 hover:border-cyan-400 hover:text-cyan-100"
+                      onClick={() => {followUser(userId, currentUser); handleClick()}}
+                    >
+                      {followStatus}
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
-          </div>
-          {/* followed list */}
-          <div>
-            <div className="flex container flex-row text-white justify-between px-2 pt-2 pb-2 text-md">
-              <div className="flex">Followed Users</div>
-              <div className="flex text-blue-400 ">Show More</div>
-            </div>
-            {/* follwed users carousel/scroll */}
-            <div className="flex flex-col gap-3 snap-x snap-proximity">
-              {/* list elements should be dynamically created later */}
-              <div className="flex flex-row text-white justify-left gap-2 px-2 snap-center scroll-smooth overflow-x-auto">
-                <div className="flex flex-col w-32 align-middle rounded-lg gap-2 min-w-min  h-fit shrink-0">
-                  <img
-                    className="h-32 w-32 rounded-full"
-                    src="https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80"
-                    alt="logo"
-                  ></img>
-                  <div className="text-center p-1">User1</div>
+            {/** list most listened to tracks of the user */}
+            <div>
+
+              <div className="flex justify-between items-center container flex-row text-zinc-300 px-2 pt-2 pb-2 text-xl">
+                <div className="flex">
+                  <b>Liked Tracks</b>
                 </div>
-                <div className="flex flex-col w-32 align-middle rounded-lg gap-2 min-w-min  h-fit shrink-0">
-                  <img
-                    className="h-32 w-32 rounded-full"
-                    src="https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80"
-                    alt="logo"
-                  ></img>
-                  <div className="text-center p-1">User2</div>
+                <div className="flex h-auto w-28 mb-1 hover:scale-105">
+                  <a href="https://open.spotify.com/" target="_blank">
+                  <Image className="" src={spotify_logo} alt="spotify logo" />
+                  </a>
                 </div>
-                <div className="flex flex-col w-32 align-middle rounded-lg gap-2 min-w-min  h-fit shrink-0">
-                  <img
-                    className="h-32 w-32 rounded-full"
-                    src="https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80"
-                    alt="logo"
-                  ></img>
-                  <div className="text-center p-1">User3</div>
-                </div>
-                <div className="flex flex-col w-32 align-middle rounded-lg gap-2 min-w-min  h-fit shrink-0">
-                  <img
-                    className="h-32 w-32 rounded-full"
-                    src="https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80"
-                    alt="logo"
-                  ></img>
-                  <div className="text-center p-1">User4</div>
-                </div>
-                <div className="flex flex-col w-32 align-middle rounded-lg gap-2 min-w-min  h-fit shrink-0">
-                  <img
-                    className="h-32 w-32 rounded-full"
-                    src="https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80"
-                    alt="logo"
-                  ></img>
-                  <div className="text-center p-1">User5</div>
-                </div>
-                <div className="flex flex-col w-32 align-middle rounded-lg gap-2 min-w-min  h-fit shrink-0">
-                  <img
-                    className="h-32 w-32 rounded-full"
-                    src="https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80"
-                    alt="logo"
-                  ></img>
-                  <div className="text-center p-1">User6</div>
-                </div>
-                <div className="flex flex-col w-32 align-middle rounded-lg gap-2 min-w-min  h-fit shrink-0">
-                  <img
-                    className="h-32 w-32 rounded-full"
-                    src="https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80"
-                    alt="logo"
-                  ></img>
-                  <div className="text-center p-1">User7</div>
-                </div>
-                <div className="flex flex-col w-32 align-middle rounded-lg gap-2 min-w-min  h-fit shrink-0">
-                  <img
-                    className="h-32 w-32 rounded-full"
-                    src="https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80"
-                    alt="logo"
-                  ></img>
-                  <div className="text-center p-1">User8</div>
+
+              </div>
+              {/* follwed users carousel/scroll */}
+              <div className="flex flex-col gap-3 snap-x snap-proximity">
+                {/* list elements should be dynamically created later */}
+                {/* props to pass: album cover for song, song title, artist name */}
+                <div className="flex flex-row text-zinc-300 justify-left gap-3 px-2 snap-center scroll-smooth overflow-x-auto h-56">
+                  <SongOnProfile
+                    providers={providers}
+                    userLikedTracks={userLikedTracks}
+                  ></SongOnProfile>
                 </div>
               </div>
             </div>
-          </div>
-          {/* followers list */}
-          <div>
-            <div className="flex container flex-row text-white justify-between px-2 pt-2 pb-2 text-md">
-              <div className="flex">Followers</div>
-              <div className="flex text-blue-400 ">Show More</div>
+            {/* followed list */}
+            <div>
+
+              <div className="flex items-center container flex-row text-zinc-300 justify-between px-2 pt-2 pb-5 text-xl">
+                <div className="flex bolder">Following</div>
+                <div className="flex text-blue-400 text-sm">Show More</div>
+
+              </div>
+              {/* follwed users carousel/scroll */}
+              <div className="flex flex-col gap-3 snap-x snap-proximity">
+                {/* list elements should be dynamically created later */}
+                {/* props to pass: username, profile picture */}
+
+                <div className="flex flex-row text-zinc-300 justify-left gap-10 px-2 snap-center scroll-smooth overflow-x-auto h-42">
+                  <UserOnProfile providers={providers} userlist={listFollowings}></UserOnProfile>
+
+                </div>
+              </div>
             </div>
-            {/* section 2 elements */}
-            <div className="flex flex-col gap-3 snap-x snap-proximity">
-              {/* list elements should be dynamically created later */}
-              <div className="flex flex-row text-white justify-left gap-2 px-2 snap-center scroll-smooth overflow-x-auto">
-                <div className="flex flex-col w-32 align-middle rounded-lg gap-2 min-w-min  h-fit shrink-0">
-                  <img
-                    className="h-32 w-32 rounded-full"
-                    src="https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80"
-                    alt="logo"
-                  ></img>
-                  <div className="text-center p-1">User1</div>
-                </div>
-                <div className="flex flex-col w-32 align-middle rounded-lg gap-2 min-w-min  h-fit shrink-0">
-                  <img
-                    className="h-32 w-32 rounded-full"
-                    src="https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80"
-                    alt="logo"
-                  ></img>
-                  <div className="text-center p-1">User2</div>
-                </div>
-                <div className="flex flex-col w-32 align-middle rounded-lg gap-2 min-w-min  h-fit shrink-0">
-                  <img
-                    className="h-32 w-32 rounded-full"
-                    src="https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80"
-                    alt="logo"
-                  ></img>
-                  <div className="text-center p-1">User3</div>
-                </div>
-                <div className="flex flex-col w-32 align-middle rounded-lg gap-2 min-w-min  h-fit shrink-0">
-                  <img
-                    className="h-32 w-32 rounded-full"
-                    src="https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80"
-                    alt="logo"
-                  ></img>
-                  <div className="text-center p-1">User4</div>
-                </div>
-                <div className="flex flex-col w-32 align-middle rounded-lg gap-2 min-w-min  h-fit shrink-0">
-                  <img
-                    className="h-32 w-32 rounded-full"
-                    src="https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80"
-                    alt="logo"
-                  ></img>
-                  <div className="text-center p-1">User5</div>
-                </div>
-                <div className="flex flex-col w-32 align-middle rounded-lg gap-2 min-w-min  h-fit shrink-0">
-                  <img
-                    className="h-32 w-32 rounded-full"
-                    src="https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80"
-                    alt="logo"
-                  ></img>
-                  <div className="text-center p-1">User6</div>
-                </div>
-                <div className="flex flex-col w-32 align-middle rounded-lg gap-2 min-w-min  h-fit shrink-0">
-                  <img
-                    className="h-32 w-32 rounded-full"
-                    src="https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80"
-                    alt="logo"
-                  ></img>
-                  <div className="text-center p-1">User7</div>
-                </div>
-                <div className="flex flex-col w-32 align-middle rounded-lg gap-2 min-w-min  h-fit shrink-0">
-                  <img
-                    className="h-32 w-32 rounded-full"
-                    src="https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80"
-                    alt="logo"
-                  ></img>
-                  <div className="text-center p-1">User8</div>
+            {/* followers list */}
+            <div>
+
+            <div className="flex items-center container flex-row text-zinc-300 justify-between px-2 pt-2 pb-5 text-xl">
+                <div className="flex bolder">Followers</div>
+                <div className="flex text-blue-400 text-sm">Show More</div>
+              </div>
+              <div className="flex flex-col gap-3 snap-x snap-proximity">
+                {/* list elements should be dynamically created later */}
+                <div className="flex flex-row text-zinc-300 justify-left gap-10 px-2 snap-center scroll-smooth overflow-x-auto h-42">
+                  <UserOnProfile providers={providers} userlist={listFollowers}></UserOnProfile>
+
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </Layout>
+      <Footer />
     </div>
   );
 }
 
-export async function getServerSideProps() {
+export async function getServerSideProps(context) {
+  const userId = context.params.userId;
+  console.log(userId);
   const providers = await getProviders();
+  const client = await clientPromise;
+  const req = context.req;
+  const session = await getSession({ req });
+  const UID = session.user.username;
+  //get requests
+  const curUser = await getMyProfile(UID, client);
+  const curLikedTracks = await getUserLikedSongs(userId, client);
+  const userContent = await getProfileOthers(userId, client);
+  const followData = await getFollowData(UID, client);
+  //list of followers to display on profile
+  const listFollowers = await getFollowerUserProfiles(userId);
+  const listFollowings = await getFollowingUserProfiles(userId);
+  // const followerProfiles = await getUsersByIds(profileFollowers);
+  // const followingProfiles = await getUsersByIds(profileFollowings);
 
   return {
     props: {
-      providers,
+      providers: providers,
+      currentUser: JSON.parse(JSON.stringify(curUser)),
+      // userLikedTracks: JSON.parse(JSON.stringify(curLikedTracks)),
+      userLikedTracks: JSON.parse(JSON.stringify(curLikedTracks)),
+      profileContent: JSON.parse(JSON.stringify(userContent)),
+      followData: JSON.parse(JSON.stringify(followData)),
+      listFollowers: (listFollowers == null) ? null:JSON.parse(JSON.stringify(listFollowers)),
+      listFollowings: (listFollowings == null) ? null:JSON.parse(JSON.stringify(listFollowings)),
     },
   };
 }
-
 export default Profile;
+
+//get requests
+async function getMyProfile(UID, client) {
+  const db = client.db(process.env.MONGODB_NAME);
+  const options = {
+    // Include only the `display_name` and `id` fields in the returned document
+    projection: { _id: 0, display_name: 1, id: 1 },
+  };
+  const curUser = await db.collection("users").findOne({ id: UID }, options);
+  return curUser;
+}
+
+//for generating profile for other users
+async function getProfileOthers(UID, client) {
+  /*
+   * Requires the MongoDB Node.js Driver
+   * https://mongodb.github.io/node-mongodb-native
+   */
+
+  const agg = [
+    {
+      $match: {
+        id: UID,
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        display_name: 1,
+        href: 1,
+        id: 1,
+        images: 1,
+      },
+    },
+  ];
+
+  // const client = await clientPromise;
+  const coll = client.db(process.env.MONGODB_NAME).collection("users");
+  const cursor = coll.aggregate(agg);
+  const result = await cursor.toArray();
+  return result;
+}
+
+// should have image, song name, artist, maybe album
+async function getUserLikedSongs(UID, client) {
+  const db = client.db(process.env.MONGODB_NAME);
+  const pipeline = [
+    {
+      $match: {
+        id: UID,
+      },
+    },
+    {
+      $replaceRoot: {
+        newRoot: "$likedTrackData",
+      },
+    },
+    {
+      $project: {
+        items: {
+          track: {
+            name: 1,
+            album: {
+              name: 1,
+              href: 1,
+              images: 1,
+            },
+            artists: {
+              href: 1,
+              name: 1,
+            },
+          },
+        },
+      },
+    },
+  ];
+
+  const coll = client.db(process.env.MONGODB_NAME).collection("user-liked-tracks");
+  const cursor = coll.aggregate(pipeline);
+  const result = await cursor.toArray();
+
+  return result;
+}
+
+//profile has follow button
+// make onClick where, it adds route(other users id) to current session UID in database
+// summary
+//  make a post request on follow button click that stores id in followers: array or something
+
+export async function followUser(userId, currentUser) {
+  //post the user to the correspond session users id
+  const curUserId = Object.values(currentUser)[1];
+  console.log(curUserId);
+  console.log(userId);
+  console.log("followed user(#" + { userId } + ")");
+  //then need to do corresponding follow operations
+  //add current user to other users followers
+  const idfollowingid = {
+    userId,
+    curUserId,
+  };
+  const response1 = await fetch("/api/addFollower", {
+    method: "POST",
+    body: JSON.stringify(idfollowingid),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const id1followid2 = {
+    curUserId,
+    userId,
+  };
+  const response2 = await fetch("/api/startFollowing", {
+    method: "POST",
+    body: JSON.stringify(id1followid2),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+}
+
+export async function unfollowUser(userId, currentUser) {
+  //post the user to the correspond session users id
+  const curUserId = Object.values(currentUser)[1];
+  console.log(curUserId);
+  console.log(userId);
+  console.log("followed user(#" + { userId } + ")");
+  //then need to do corresponding follow operations
+  //add current user to other users followers
+  const idfollowingid = {
+    userId,
+    curUserId,
+  };
+  const response1 = await fetch("/api/removeFollower", {
+    method: "POST",
+    body: JSON.stringify(idfollowingid),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const id1followid2 = {
+    curUserId,
+    userId,
+  };
+  const response2 = await fetch("/api/stopFollowing", {
+    method: "POST",
+    body: JSON.stringify(id1followid2),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+}
+
+async function getFollowData(UID, client) {
+  const db = client.db(process.env.MONGODB_NAME);
+  const pipeline = [
+    {
+      $match: {
+        id: UID,
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        id: 1,
+        follower: 1,
+        following: 1,
+      },
+    },
+  ];
+
+  const coll = client
+    .db(process.env.MONGODB_NAME)
+    .collection("user-followed-users");
+  const cursor = coll.aggregate(pipeline);
+  const result = await cursor.toArray();
+
+  return result;
+}
+
+async function getUsersByIds(userIds, client) {
+  try {
+    const database = client.db(process.env.MONGODB_NAME);
+    const users = await database
+      .collection("users")
+      .find({ id: { $in: userIds } })
+      .toArray();
+    return users;
+  } catch (error) {
+    console.error(error);
+  }
+}
+async function getFollowerUserProfiles(userId) {
+  /*
+   * Requires the MongoDB Node.js Driver
+   * https://mongodb.github.io/node-mongodb-native
+   */
+
+  const client = await clientPromise;
+
+  const pipeline = [
+    {
+      $lookup: {
+        from: "users",
+        localField: "follower",
+        foreignField: "id",
+        as: "follow_display",
+      },
+    },
+    {
+      $match: {
+        id: userId,
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        follow_display: 1,
+      },
+    },
+  ];
+  const coll = client
+    .db(process.env.MONGODB_NAME)
+    .collection("user-followed-users");
+  const cursor = coll.aggregate(pipeline);
+  const result = await cursor.toArray();
+  return result;
+}
+async function getFollowingUserProfiles(userId) {
+  /*
+   * Requires the MongoDB Node.js Driver
+   * https://mongodb.github.io/node-mongodb-native
+   */
+
+  const client = await clientPromise;
+
+  const pipeline = [
+    {
+      '$lookup': {
+        'from': 'users', 
+        'localField': 'following', 
+        'foreignField': 'id', 
+        'as': 'follow_display'
+      }
+    }, {
+      '$match': {
+        'id': userId,
+      }
+    }, {
+      '$project': {
+        '_id': 0, 
+        'follow_display': 1
+      }
+    }
+  ];
+  const coll = client
+    .db(process.env.MONGODB_NAME)
+    .collection("user-followed-users");
+  const cursor = coll.aggregate(pipeline);
+  const result = await cursor.toArray();
+  console.log(result);
+  return result;
+}
