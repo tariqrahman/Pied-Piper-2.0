@@ -87,7 +87,7 @@ export default function UserOnUsers({ ...props }) {
                     </div>
                   </div>
                 </div>
-              </div>
+            </div>
             </div>
           </div>
         </div>

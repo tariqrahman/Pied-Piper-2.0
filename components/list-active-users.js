@@ -8,7 +8,7 @@ export default function UserDisplay({ ...props }) {
         display: "flex",
         gap: "20px 50px",
         marginTop: "10px",
-        marginBottom: "25px",
+        marginBottom: "100px",
       }}
     >
       <ProfileImage src={imgURL} />
@@ -76,8 +76,7 @@ function DisplayTracks({ ...props }) {
         return (
           <div
             key={idx}
-            className="flex flex-row items-center gap-2 h-fit shrink-0 pt-0.5"
-          >
+            className="flex flex-row items-center gap-2 h-fit shrink-0 pt-0.5">
             <img className="h-8 w-8" src={song_img} alt="logo"></img>
             <div className="flex container flex-row justify-between">
               <div className="">{song_name}</div>
@@ -85,6 +84,7 @@ function DisplayTracks({ ...props }) {
                 {artist} | {album}
               </div>
             </div>
+            
           </div>
         );
       })}
